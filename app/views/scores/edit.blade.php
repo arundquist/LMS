@@ -1,0 +1,1 @@
+C:\xampp\htdocs\courses\app/views/scores/edit.blade.php

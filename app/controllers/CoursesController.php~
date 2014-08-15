@@ -1,0 +1,113 @@
+<?php
+
+class CoursesController extends \BaseController {
+
+	public function __construct()
+	{
+		$this->beforeFilter('authFaculty');
+	}
+	
+	
+	
+	public function getDoesthiswork()
+	{
+		return "yep it does";
+	}
+
+	/**
+	 * Show the form for creating a new course
+	 *
+	 * @return Response
+	 */
+	public function getCreate()
+	{
+		return View::make('courses.create');
+	}
+
+	/**
+	 * Store a newly created course in storage.
+	 *
+	 * @return Response
+	 */
+	public function postCreate()
+	{
+		$validator = Validator::make($data = Input::all(), Course::$rules);
+
+		if ($validator->fails())
+		{
+			return Redirect::back()->withErrors($validator)->withInput();
+		}
+
+		$course=Course::create($data);
+
+		return Redirect::route('syllabus.show',[$course->id]);
+		
+		//return Input::get('roster');
+		
+	}
+
+	public function getAdddates($course_id)
+	{
+		$course=Course::findOrFail($course_id);
+		$currentdates=$course->dates;
+		return View::make('courses.adddates',
+			['course'=>$course,
+			'currentdates'=>$currentdates]);
+	}
+	
+	public function postAdddates($course_id)
+	{
+		$course=Course::findOrFail($course_id);
+		foreach (Input::get('deletedates') AS $dateid)
+		{
+			Date::find($dateid)->delete();
+		};
+		if (Input::get('adddate')!='')
+		{
+			$date=new Date;
+			$date->date=Input::get('adddate');
+			$date->course_id=$course_id;
+			$date->save();
+		};
+		
+		// get all dates for course
+		
+		$curdates=$course->dates()->lists('date');
+		
+		if ((Input::get('startdate')!='') && (Input::get('enddate')!='') 
+			&& is_set(Input::get('days')))
+		{
+			$start=Carbon::createFromFormat('Y-m-d', Input::get('startdate'));
+			// if date is in the days list, add
+			if (array_key_exists($start->dayOfWeek, Input::get('days')))
+			{
+				// make sure date doesn't already exist
+				// could make a list of dates up above
+				// but they're all carbon instances and this
+				// carbon instance will have the current time
+				// although I could do ->startOfDay to set it to zero
+				
+				// or I could do 
+				// $course->dates()->where('date', Input::get('startdate'))->count()
+				// or something. Ugh, what a pain
+			};
+			foreach (Input::get('days') AS $day)
+			{
+				$beg=$start->next($day);
+				// start a loop where you keep adding
+				// seven days.
+				// for each check if it's after the
+				// end date
+				// and also check if the date already exists
+				// I think doing $beg->addWeek()
+				// will keep changing $beg throughout the loop
+			};
+		};
+	}
+	
+
+	
+
+	
+
+}

@@ -1,0 +1,41 @@
+<?php
+
+class TestsController extends \BaseController {
+
+	/**
+	 * Display a listing of the resource.
+	 * GET /tests
+	 *
+	 * @return Response
+	 */
+	
+	public function getEmails()
+	{
+		return View::make('tests.roster');
+	}
+	 
+	 public function postEmails()
+	{
+		preg_match_all("/<A[^>]*Student Information[^>]*>([^<]*).*?do_mail\('hamline.edu','([a-zA-Z0-9]+)/s",Input::get('roster'), $matches);
+		foreach ($matches[1] AS $key=>$match)
+		{
+			echo "\"$match\" &lt;{$matches[2][$key]}@hamline.edu&gt;<br/>";
+		};
+	}
+	
+	public function getDates()
+	{
+		$date="1971-07-07";
+		$carbondate=Carbon::createFromFormat('Y-m-d', $date);
+		$nextfriday=$carbondate->next(5);
+		$followingfriday=$nextfriday->addWeek();
+		dd($nextfriday);
+	}
+	
+	public function getComparedates()
+	{
+		$curdates=Course::find(76)->dates()->lists('date');
+		dd($curdates);
+	}
+
+}

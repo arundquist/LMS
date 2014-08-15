@@ -1,0 +1,11 @@
+<h1>{{$type->course->classname}} ({{$type->course->semester}} {{$type->course->year}})</h1>
+<h2>{{$type->type}} assignments</h2>
+<table border='1'>
+
+@foreach ($type->assignments AS $assignment)
+	<tr>
+		<td>{{$assignment->comments}}</td>
+		<td>{{$assignment->details}}</td>
+	</tr>
+@endforeach
+</table>

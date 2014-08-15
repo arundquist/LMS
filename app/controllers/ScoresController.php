@@ -1,0 +1,111 @@
+<?php
+
+class ScoresController extends \BaseController {
+
+	/**
+	 * Display a listing of scores
+	 *
+	 * @return Response
+	 */
+	 
+	protected $dates = array('date');
+	 
+	public function index()
+	{
+		$scores = Score::all();
+
+		return View::make('scores.index', compact('scores'));
+	}
+
+	/**
+	 * Show the form for creating a new score
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+		return View::make('scores.create');
+	}
+
+	/**
+	 * Store a newly created score in storage.
+	 *
+	 * @return Response
+	 */
+	public function store()
+	{
+		$validator = Validator::make($data = Input::all(), Score::$rules);
+
+		if ($validator->fails())
+		{
+			return Redirect::back()->withErrors($validator)->withInput();
+		}
+
+		Score::create($data);
+
+		return Redirect::route('scores.index');
+	}
+
+	/**
+	 * Display the specified score.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+		$score = Score::findOrFail($id);
+		$score->load('assignment');
+
+		return View::make('scores.show', compact('score'));
+	}
+
+	/**
+	 * Show the form for editing the specified score.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit($id)
+	{
+		$score = Score::find($id);
+
+		return View::make('scores.edit', compact('score'));
+	}
+
+	/**
+	 * Update the specified score in storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+		$score = Score::findOrFail($id);
+
+		$validator = Validator::make($data = Input::all(), Score::$rules);
+
+		if ($validator->fails())
+		{
+			return Redirect::back()->withErrors($validator)->withInput();
+		}
+
+		$score->update($data);
+
+		return Redirect::route('scores.index');
+	}
+
+	/**
+	 * Remove the specified score from storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($id)
+	{
+		Score::destroy($id);
+
+		return Redirect::route('scores.index');
+	}
+
+}

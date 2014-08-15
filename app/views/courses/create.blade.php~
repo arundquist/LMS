@@ -1,0 +1,4 @@
+{{Form::open(['route'=>'courses.store'])}}
+{{Form::textarea('roster','')}}
+{{Form::submit('submit')}}
+{{Form::close()}}

@@ -1,0 +1,1 @@
+C:\xampp\htdocs\courses\app/views/faculties/create.blade.php
