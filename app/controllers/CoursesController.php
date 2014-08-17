@@ -4,7 +4,7 @@ class CoursesController extends \BaseController {
 
 	public function __construct()
 	{
-		$this->beforeFilter('authFaculty');
+		$this->beforeFilter('authFaculty', ['except'=>'getCalendar']);
 	}
 	
 	
@@ -50,6 +50,12 @@ class CoursesController extends \BaseController {
 	public function getAdddates($course_id)
 	{
 		$course=Course::findOrFail($course_id);
+		$facids=$course->faculties()->select('faculties.*')->lists('id');
+		if (!in_array(Auth::user()->userable_id, $facids))
+		{
+			return Redirect::to(action('UsersController@getLogin'));
+		};
+		
 		$currentdates=$course->dates;
 		return View::make('courses.adddates',
 			['course'=>$course,
@@ -139,6 +145,11 @@ class CoursesController extends \BaseController {
 	public function getAddroster($course_id)
 	{
 		$course=Course::findOrFail($course_id);
+		$facids=$course->faculties()->select('faculties.*')->lists('id');
+		if (!in_array(Auth::user()->userable_id, $facids))
+		{
+			return Redirect::to(action('UsersController@getLogin'));
+		};
 		$students=$course->students;
 		return View::make('courses.addroster',
 			['course'=>$course,
@@ -207,7 +218,7 @@ class CoursesController extends \BaseController {
 				// I guess I'll assume that fac and students will
 				// always have different ids. Probably a mistake
 				if (!isset($user->password))
-					$user->password=$newstudent['username'];
+					$user->password=Hash::make($newstudent['username']);
 				$user->userable_type="Student";
 				
 				// now see if student exists
@@ -236,6 +247,51 @@ class CoursesController extends \BaseController {
 			$course->students()->sync($syncids);
 		};
 		return Redirect::action("CoursesController@getAddroster", [$course_id]);
+	}
+	
+	public function getCalendar($course_id)
+	{
+		$course=Course::findOrFail($course_id);
+		$dates=$course->dates;
+		/*
+		$v=View::make('times.googlecalendar')
+			->with('courses',$cs)
+			->with('term', $term)
+			->with('title', $title);
+		return Response::make($v,"200")
+			->header('Content-Type', 'text/calendar')
+			->header('Content-Disposition', 'attachment; filename="test.ics"');
+		*/
+		$title="{$course->classname} {$course->semester} {$course->year}";
+		$v=View::make('courses.calendar')
+			->with('title', $title)
+			->with('dates', $dates);
+		return Response::make($v,"200")
+			->header('Content-Type', 'text/calendar')
+			->header('Content-Disposition', 'attachment; filename="test.ics"');
+	}
+	
+	public function getAlgorithms($course_id)
+	{
+		$course=Course::with('types', 'types.assignments')->findOrFail($course_id);
+		return View::make('courses.algorithms', compact('course'));
+	}
+	
+	public function postAlgorithms($course_id)
+	{
+		$course=Course::with('types')->findOrFail($course_id);
+		$types=$course->types;
+		$coursealgo=$course->algorithm;
+		$coursealgo->algorithm = Input::get('coursealgorithm');
+		$coursealgo->save();
+		foreach ($types AS $type)
+		{
+			$type->algorithm=Input::get("typealgorithms[{$type->id}]");
+			$type->save();
+		};
+		foreach (Input::get('deletetypes') AS $key=>$value)
+			Type::findOrFail($key)->delete();
+		return Redirect::to(action('CoursesController@getAlgorithms', [$course_id]));
 	}
 
 }

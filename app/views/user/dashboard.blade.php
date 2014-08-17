@@ -7,7 +7,15 @@
 <table class='table table-striped table-bordered'>
 	@foreach ($user->userable->courses AS $course)
 		<tr>
-			<td>{{$course->classname}}</td>
+			<td>{{$course->classname}}
+			@if ($user->userable_type == "Faculty")
+				{{link_to_action('CoursesController@getAddroster',"roster", [$course->id])}} 
+				{{link_to_action('CoursesController@getAdddates',"dates", [$course->id])}} 
+				{{link_to_action('CoursesController@getAlgorithms',"Algorithms", [$course->id])}} 
+			@endif
+			
+			
+			</td>
 			<td>{{$course->semester}} {{$course->year}}</td>
 			<td>{{link_to_route('syllabus.show', 'syllabus', [$course->id])}}</td>
 			@if ($user->userable_type == 'Faculty')

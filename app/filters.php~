@@ -99,6 +99,22 @@ Route::filter('csrf', function()
 |
 */
 
+Route::filter('authFaculty', function()
+{
+	if ((Auth::guest()) || (Auth::user()->userable_type != 'Faculty'))
+	{
+		if (Request::ajax())
+		{
+			return Response::make('Unauthorized', 401);
+		}
+		else
+		{
+			
+			return Redirect::guest(action('UsersController@getLogin'));
+		}
+	}
+});
+
 Route::filter('checkcorrectfaculty', function($route, $request)
 	{
 		$course=Course::findOrFail(Request::segment(3));

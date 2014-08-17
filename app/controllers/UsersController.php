@@ -4,7 +4,8 @@ class UsersController extends \BaseController {
 
 	public function __construct()
 	    {
-		$this->beforeFilter('auth', array('except' =>['postLogin', 'getLogin']));
+		$this->beforeFilter('auth', array('except' =>['postLogin', 'getLogin', 'getChangepassword',
+			'postChangepassword']));
 		
 	
 		
@@ -47,4 +48,36 @@ class UsersController extends \BaseController {
 	 	 $user=Auth::user();
 	 	 return View::make('user.dashboard', compact('user'));
 	 }
+	 
+	 public function getChangepassword()
+	 {
+	 	 $user=Auth::user();
+	 	 return View::make('user.changepassword', compact('user'));
+	 }
+	 
+	 public function postChangepassword()
+	 {
+	 	 if (Auth::guest())
+	 	 	 return Redirect::to(action('UsersController@getLogin'));
+	 	 $user=Auth::user();
+	 	 if ((Input::get('newpassword')==Input::get('newpassword2'))
+	 	 	 && (Input::get('newpassword') != $user->username))
+	 	 {
+	 	 	 $user->password=Hash::make(Input::get('newpassword'));
+	 	 	 $user->save();
+	 	 	 return Redirect::to(action('UsersController@getDashboard'));
+	 	 } else
+	 	 {
+	 	 	 return Redirect::back();
+	 	 };
+	 }
+	 
+	 public function getResetpassword()
+	 {
+	 	 $user=Auth::user();
+	 	 $user->password=Hash::make($user->username);
+	 	 $user->save();
+	 	 return Redirect::to(action('UsersController@getDashboard'));
+	 }
+	 	 
 }

@@ -7,7 +7,7 @@
 		"laravel/framework": "4.2.*",
 		"way/generators": "2.*",
 		"graham-campbell/markdown": "~2.0",
-		"cartalyst/sentry": "2.1.*"
+		"makzumi/calendar": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

@@ -50,5 +50,53 @@ class TestsController extends \BaseController {
 			echo "false here";
 		};
 	}
+	
+	public function getGoogledoc($docid)
+	{
+		echo "<a href='https://docs.google.com/a/hamline.edu/document/d/".$docid."'>google doc</a><br/>";
+		echo "<iframe src='https://docs.google.com/document/d/$docid/pub?embedded=true' width='640' height='400'></iframe>";
+	}
+	
+	public function getTesthash()
+	{
+		if (Hash::check(Auth::user()->username, Auth::user()->password))
+			echo "yep";
+		
+	}
+	
+	public function getTesthelper()
+	{
+		echo Helpers\trythis();
+	}
+	
+	public function getTestgoogle()
+	{
+		$text="lsdjf kdlsjf sdljf google(1pqLRjsSwWhmrF8SQznKfvHnd4VePCsn0_dgHuP1Ycw4) sdfj lkd";
+		return Helpers\replacegoogle($text);
+	}
+	
+	public function getTestpregreplace()
+	{
+		$text = "a a sjdfkd a a rueioruewio a";
+		$newtext=preg_replace('/a/', 'y', $text);
+		return $newtext;
+	}
+	
+	public function getTestcal()
+	{
+		$data = array(
+		    3  => 'http://example.com/news/article/2006/03/',
+		    7  => 'http://example.com/news/article/2006/07/',
+		    13 => 'http://example.com/news/article/2006/13/',
+		    26 => 'http://example.com/news/article/2006/26/'
+		);
+		
+		return Calendar::generate(2014, 8, $data);
+	}
+	
+	public function getTestgooglecal()
+	{
+		Helpers\makecalendar([3,2]);
+	}
 
 }

@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'GrahamCampbell\Markdown\MarkdownServiceProvider',
+		'Gloudemans\Calendar\CalendarServiceProvider'
 
 	),
 
@@ -192,6 +193,7 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 		'Markdown' => 'GrahamCampbell\Markdown\Facades\Markdown',
 		'Carbon'        => 'Carbon\Carbon',
+		'Calendar'        => 'Gloudemans\Calendar\Facades\Calendar',
 
 	),
 

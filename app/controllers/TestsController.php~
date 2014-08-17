@@ -16,10 +16,10 @@ class TestsController extends \BaseController {
 	 
 	 public function postEmails()
 	{
-		preg_match_all("/<A[^>]*Student Information[^>]*>([^<]*).*?do_mail\('hamline.edu','([a-zA-Z0-9]+)/s",Input::get('roster'), $matches);
+		preg_match_all("/<A[^>]*Student Information[^>]*>([^<]*).*?fieldmediumtext\">([0-9]+).*?do_mail\('hamline.edu','([a-zA-Z0-9]+)/s",Input::get('roster'), $matches);
 		foreach ($matches[1] AS $key=>$match)
 		{
-			echo "\"$match\" &lt;{$matches[2][$key]}@hamline.edu&gt;<br/>";
+			echo "\"$match\" &lt;{$matches[3][$key]}@hamline.edu&gt;:{$matches[2][$key]}<br/>";
 		};
 	}
 	
@@ -29,13 +29,57 @@ class TestsController extends \BaseController {
 		$carbondate=Carbon::createFromFormat('Y-m-d', $date);
 		$nextfriday=$carbondate->next(5);
 		$followingfriday=$nextfriday->addWeek();
+		$nextfriday->addWeek();
 		dd($nextfriday);
 	}
 	
 	public function getComparedates()
 	{
-		$curdates=Course::find(76)->dates()->lists('date');
+		$curdates=Course::find(76)->dates()->select(DB::raw('date(date) as date'))->lists('date');
 		dd($curdates);
+	}
+	
+	public function getFirstornew()
+	{
+		$user=User::firstOrNew(['username'=>'96658']);
+		if (isset($user->password))
+		{
+			echo "true here";
+		} else
+		{
+			echo "false here";
+		};
+	}
+	
+	public function getGoogledoc($docid)
+	{
+		echo "<a href='https://docs.google.com/a/hamline.edu/document/d/".$docid."'>google doc</a><br/>";
+		echo "<iframe src='https://docs.google.com/document/d/$docid/pub?embedded=true' width='640' height='400'></iframe>";
+	}
+	
+	public function getTesthash()
+	{
+		if (Hash::check(Auth::user()->username, Auth::user()->password))
+			echo "yep";
+		
+	}
+	
+	public function getTesthelper()
+	{
+		echo Helpers\trythis();
+	}
+	
+	public function getTestgoogle()
+	{
+		$text="lsdjf kdlsjf sdljf google(1pqLRjsSwWhmrF8SQznKfvHnd4VePCsn0_dgHuP1Ycw4) sdfj lkd";
+		return Helpers\replacegoogle($text);
+	}
+	
+	public function getTestpregreplace()
+	{
+		$text = "a a sjdfkd a a rueioruewio a";
+		$newtext=preg_replace('/a/', 'y', $text);
+		return $newtext;
 	}
 
 }
