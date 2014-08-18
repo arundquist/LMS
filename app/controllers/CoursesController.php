@@ -79,7 +79,7 @@ class CoursesController extends \BaseController {
 		if (Input::get('adddate')!='')
 		{
 			$date=new Date;
-			$date->date=Input::get('adddate');
+			$date->date=Input::get('adddate')." $coursetime";
 			$date->course_id=$course_id;
 			$date->save();
 		};
@@ -294,6 +294,44 @@ class CoursesController extends \BaseController {
 		foreach (Input::get('deletetypes') AS $key=>$value)
 			Type::findOrFail($key)->delete();
 		return Redirect::to(action('CoursesController@getAlgorithms', [$course_id]));
+	}
+	
+	public function getGroups($course_id)
+	{
+		$course=Course::findOrFail($course_id);
+		$students=$course->students->lists('name');
+		return View::make('courses.groups', compact('students'));
+	}
+	
+	public function postGroups()
+	{
+		$in=Input::get('in');
+		$max=Input::get('max');
+		$num=count($in);
+		$numgroups=ceil($num/$max);
+		$diff=$numgroups*$max-$num;
+		$rolelist=array('Scribe', 'Calculator', 'Skeptic','Moderator',
+			'','','','','','','','');
+		foreach (range(1,$numgroups) AS $gnum) {
+			foreach (range(0,$max-2) AS $tmp) {
+				$role[]="$gnum: $rolelist[$tmp]";
+			}
+		//	$role[]="$gnum: Scribe";
+		//	$role[]="$gnum: Calculator";
+		//	$role[]="$gnum: Skeptic";
+			};
+		if ($numgroups-$diff>0) {
+		foreach (range(1,$numgroups-$diff) AS $gnum) {
+			$i=$max-1;
+			$role[]="$gnum: $rolelist[$i]";
+			};
+			};
+		
+		shuffle($role);
+		return View::make('courses.groups', 
+			['in'=>$in,
+			'roles'=>$role]);
+		
 	}
 
 }

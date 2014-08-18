@@ -44,5 +44,21 @@ class Course extends \Eloquent {
 	{
 		return "{$this->classname} ({$this->semester} {$this->year})";
 	}
+	
+	public function getGoogleAttribute()
+	{
+		$use=preg_match('/^google\(([^\)]+)\)$/', $this->syllabus, $matches);
+		if ($use==1)
+		{
+			$all=file_get_contents("https://docs.google.com/document/d/$matches[1]/pub?embedded=true");
+			preg_match('~(<style.*?</style>).*<body[^>]*?>(.*?)</body>~', $all, $matches2);
+			return $matches2;
+		}
+		else
+		{
+			
+			return [$this->syllabus];
+		};
+	}
 
 }

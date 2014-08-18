@@ -29,7 +29,7 @@ $text=preg_replace('/\[(http[^\s]+)\s([^\]]+)\]/', '[${2}](${1})', $text);
 
 @foreach ($course->dates()->orderBy('date')->get() AS $date)
 	@if ($date->date->diffInDays()<8)
-		{{link_to_route('dates.show', "<b>{$date->date->diffForHumans()}</b>: {$date->maintopic}", [$date->id])}}<br/>
+		{{link_to_route('dates.show', "{$date->date->diffForHumans()}: {$date->maintopic}", [$date->id])}}<br/>
 	@else
 		{{link_to_route('dates.show', "{$date->date->toDateString()}: {$date->maintopic}", [$date->id])}}<br/>
 	@endif

@@ -47,6 +47,12 @@ class SyllabusController extends \BaseController {
 		}
 
 		$course->update($data);
+		foreach(Input::get('topics') AS $date_id => $maintopic)
+		{
+			$date=Date::find($date_id);
+			$date->maintopic=$maintopic;
+			$date->save();
+		};
 		return Redirect::route('syllabus.show',[$id]);
 	
 	}

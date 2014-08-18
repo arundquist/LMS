@@ -1,6 +1,10 @@
 @extends('layouts.master')
+@section('head')
+{{$head}}
+@stop
 @section('main')
 <h1>{{$course->classname}} ({{$course->semester}} {{$course->year}})</h1>
+<p>{{link_to_route('syllabus.edit', "edit (faculty login required)", [$course->id])}}</p>
 <table>
 <tr>
 @foreach ($course->faculties AS $faculty)
@@ -22,7 +26,7 @@ $text=$course->syllabus;
 //fix links:
 $text=preg_replace('/\[(http[^\s]+)\s([^\]]+)\]/', '[${2}](${1})', $text);
 ?>
-{{Helpers\replacegoogle($text)}}
+{{$body}}
 
 </div>
 <div class='col-md-4'>

@@ -107,5 +107,29 @@ class TestsController extends \BaseController {
 		return View::make('tests.google',
 			['return'=>"$matches[1] $matches[2]"]);
 	}
+	
+	public function getGooglesyllabus($course_id)
+	{
+		$course=Course::findOrFail($course_id);
+		$matches=$course->google;
+		// if $matches has just one element, it's ready for markdown
+		// if it has more, then the second one is the style and the third is the html 
+		// from google
+		//dd(count($matches));
+		if (count($matches)==1) // just markdown
+		{
+			$head='';
+			$body=$matches[0];
+		}
+		else
+		{
+			$head=$matches[1];
+			$body=$matches[2];
+		};
+		return View::make('tests.googlesyllabus',
+			['head'=>$head,
+			'body'=>$body]);   
+	}
+	
 
 }

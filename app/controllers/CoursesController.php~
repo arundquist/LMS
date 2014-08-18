@@ -65,6 +65,8 @@ class CoursesController extends \BaseController {
 	public function postAdddates($course_id)
 	{
 		$course=Course::findOrFail($course_id);
+		$coursetime=$course->time;
+		$timearray=explode(":", $coursetime);
 		$deletedates=Input::get('deletedates');
 		$days=Input::get('days');
 		if (isset($deletedates))
@@ -77,7 +79,7 @@ class CoursesController extends \BaseController {
 		if (Input::get('adddate')!='')
 		{
 			$date=new Date;
-			$date->date=Input::get('adddate');
+			$date->date=Input::get('adddate')." $coursetime";
 			$date->course_id=$course_id;
 			$date->save();
 		};
@@ -89,7 +91,7 @@ class CoursesController extends \BaseController {
 		if ((Input::get('startdate')!='') && (Input::get('enddate')!='') 
 			&& isset($days))
 		{
-			$start=Carbon::createFromFormat('Y-m-d', Input::get('startdate'));
+			$start=Carbon::createFromFormat('Y-m-d H:i:s', Input::get('startdate')." $coursetime");
 			$end=Carbon::createFromFormat('Y-m-d', Input::get('enddate'));
 			// if date is in the days list, add
 			if (array_key_exists($start->dayOfWeek, Input::get('days')))
@@ -128,7 +130,7 @@ class CoursesController extends \BaseController {
 					if (!in_array($beg->toDateString(), $curdates))
 					{
 						$date=new Date;
-						$date->date=$beg;
+						$date->date=$beg->setTime($timearray[0], $timearray[1], $timearray[2]);
 						$date->course_id=$course_id;
 						$date->save();
 						$curdates[]=$beg->toDateString();
