@@ -19,7 +19,7 @@ class SyllabusController extends \BaseController {
 	public function index()
 	{
 		$courses=Course::orderBy('year', 'DESC')->get();
-		return View::make('Syllabus.index', compact('courses'));
+		return View::make('syllabus.index', compact('courses'));
 	
 	}
 	
@@ -32,7 +32,7 @@ class SyllabusController extends \BaseController {
 	public function edit($id)
 	{
 		$course=Course::findOrFail($id);
-		return View::make('Syllabus.edit', compact('course'));
+		return View::make('syllabus.edit', compact('course'));
 	}
 	
 	public function update($id)
