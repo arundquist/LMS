@@ -27,7 +27,8 @@ class Course extends \Eloquent {
 	
 	public function students()
 	{
-		return $this->belongsToMany('Student');
+		return $this->belongsToMany('Student')
+			->orderBy('name', 'ASC');
 	}
 	
 	public function types()

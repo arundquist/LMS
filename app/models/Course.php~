@@ -56,6 +56,7 @@ class Course extends \Eloquent {
 		}
 		else
 		{
+			
 			return [$this->syllabus];
 		};
 	}
