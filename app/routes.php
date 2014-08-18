@@ -13,7 +13,8 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	$faculties=Faculty::all();
+	return View::make('public.welcome', compact('faculties'));
 });
 
 Route::get('markdown', function()
