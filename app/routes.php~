@@ -23,12 +23,13 @@ Route::get('markdown', function()
 
 Route::controller('grades', 'GradesController');
 Route::controller('user', 'UsersController');
+Route::controller('tests', 'TestsController');
 Route::resource('syllabus', 'SyllabusController');
 
 Route::resource('algorithms', 'AlgorithmsController');
 Route::resource('assignments', 'AssignmentsController');
 Route::resource('comments', 'CommentsController');
-Route::resource('courses', 'CoursesController');
+Route::controller('courses', 'CoursesController');
 Route::resource('dates', 'DatesController');
 Route::resource('faculty', 'FacultiesController');
 Route::resource('files', 'FilesController');

@@ -24,6 +24,7 @@ Route::get('markdown', function()
 Route::controller('grades', 'GradesController');
 Route::controller('user', 'UsersController');
 Route::controller('tests', 'TestsController');
+Route::controller('public', 'PublicController');
 Route::resource('syllabus', 'SyllabusController');
 
 Route::resource('algorithms', 'AlgorithmsController');

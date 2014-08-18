@@ -8,7 +8,7 @@ $text=$course->syllabus;
 //fix links:
 $text=preg_replace('/\[(http[^\s]+)\s([^\]]+)\]/', '[${2}](${1})', $text);
 ?>
-{{Markdown::render($text)}}
+{{Helpers\replacegoogle($text)}}
 
 </div>
 <div class='col-md-4'>

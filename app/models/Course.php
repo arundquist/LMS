@@ -39,5 +39,10 @@ class Course extends \Eloquent {
 	{
 		return $this->hasManyThrough('Assignment', 'Type');
 	}
+	
+	public function getShortAttribute()
+	{
+		return "{$this->classname} ({$this->semester} {$this->year})";
+	}
 
 }
