@@ -26,7 +26,7 @@ class SyllabusController extends \BaseController {
 	public function show($id)
 	{
 		$course=Course::findOrFail($id);
-		return View::make('Syllabus.show', compact('course'));
+		return View::make('syllabus.show', compact('course'));
 	}
 	
 	public function edit($id)
