@@ -270,5 +270,28 @@ class CoursesController extends \BaseController {
 			->header('Content-Type', 'text/calendar')
 			->header('Content-Disposition', 'attachment; filename="test.ics"');
 	}
+	
+	public function getAlgorithms($course_id)
+	{
+		$course=Course::with('types', 'types.assignments')->findOrFail($course_id);
+		return View::make('courses.algorithms', compact('course'));
+	}
+	
+	public function postAlgorithms($course_id)
+	{
+		$course=Course::with('types')->findOrFail($course_id);
+		$types=$course->types;
+		$coursealgo=$course->algorithm;
+		$coursealgo->algorithm = Input::get('coursealgorithm');
+		$coursealgo->save();
+		foreach ($types AS $type)
+		{
+			$type->algorithm=Input::get("typealgorithms[{$type->id}]");
+			$type->save();
+		};
+		foreach (Input::get('deletetypes') AS $key=>$value)
+			Type::findOrFail($key)->delete();
+		return Redirect::to(action('CoursesController@getAlgorithms', [$course_id]));
+	}
 
 }

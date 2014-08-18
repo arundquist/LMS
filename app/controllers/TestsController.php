@@ -98,5 +98,14 @@ class TestsController extends \BaseController {
 	{
 		Helpers\makecalendar([3,2]);
 	}
+	
+	public function getScrapegoogle($docid)
+	{
+		$all=file_get_contents("https://docs.google.com/document/d/$docid/pub?embedded=true");
+		$all2=preg_replace('~<head>.*(<style.*?</style>)</head><body[^>]*?>(.*)</body></html>~','$1',$all);
+		preg_match('~(<style.*?</style>).*<body[^>]*?>(.*?)</body>~', $all, $matches);
+		return View::make('tests.google',
+			['return'=>"$matches[1] $matches[2]"]);
+	}
 
 }
