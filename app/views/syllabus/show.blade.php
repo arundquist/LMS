@@ -5,19 +5,19 @@
 @section('main')
 <h1>{{$course->classname}} ({{$course->semester}} {{$course->year}})</h1>
 <p>{{link_to_route('syllabus.edit', "edit (faculty login required)", [$course->id])}}</p>
-<table>
-<tr>
+<table class="table table-bordered">
+
 @foreach ($course->faculties AS $faculty)
-<td>
-<ul class="list-group">
-	<li class="list-group-item">{{$faculty->name}}</li>
-	<li class="list-group-item">email: {{HTML::mailto($faculty->email)}}</li>
-	<li class="list-group-item">office: {{$faculty->office}}</li>
-	<li class="list-group-item">phone: {{HTML::link("tel:+1-{$faculty->phone}", $faculty->phone)}}</li>
-</ul>
-</td>
-@endforeach
+<tr>
+
+	<td>{{$faculty->name}}</td>
+	<td>{{HTML::mailto($faculty->email)}}</td>
+	<td>{{$faculty->office}}</td>
+	<td>{{HTML::link("tel:+1-{$faculty->phone}", $faculty->phone)}}</td>
+
 </tr>
+@endforeach
+
 </table>
 <div class='row'>
 <div class='col-md-8'>
