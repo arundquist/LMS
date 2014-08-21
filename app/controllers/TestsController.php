@@ -169,10 +169,14 @@ class TestsController extends \BaseController {
 	
 	public function getFixalgorithms()
 	{
-		$courses=Course::with('algorithm')->has('algorithm','==',0)->get();
-		foreach ($courses AS $course)
+		$courses=Course::with('algorithm')->has('algorithm','==',0)->lists('id');
+		//dd($courses);
+		foreach ($courses AS $course_id)
 		{
-			$course->algorithm->algorithm='';
+			$alg=new Algorithm;
+			$alg->algorithm='';
+			$alg->course_id=$course_id;
+			$alg->save();
 		};
 	}
 
