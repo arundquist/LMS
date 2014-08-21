@@ -161,5 +161,32 @@ class TestsController extends \BaseController {
 		dd($student);
 	}
 	
+	public function getTestteammateids()
+	{
+		$student=Student::find(1272);
+		dd($student->teammateids(1177));
+	}
+	
+	public function getFixalgorithms()
+	{
+		$courses=Course::with('algorithm')->has('algorithm','==',0)->lists('id');
+		//dd($courses);
+		foreach ($courses AS $course_id)
+		{
+			$alg=new Algorithm;
+			$alg->algorithm='';
+			$alg->course_id=$course_id;
+			$alg->save();
+		};
+	}
+	
+	public function getTesteval()
+	{
+		$totals=array();
+		$totals[-2]='3';
+		$bigfull="\$totals[-1]=30;";
+		eval($bigfull);
+		dd($totals);
+	}
 
 }

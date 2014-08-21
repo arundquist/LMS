@@ -6,7 +6,7 @@ if (Session::get('scorelist'))
 else
 	$scorelist=array();
 ?>
-<h1>{{$course->classname}}</h1>
+<h1>{{$course->short}}</h1>
 <h2>{{$assignment->type->type}}: {{$assignment->comments}}</h2>
 {{Form::open(['method'=>'post', 'action'=>['GradesController@postAssignment', $assignment->id]])}}
 {{Form::text('description', Session::get('description'), ['placeholder'=>'description'])}}

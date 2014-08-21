@@ -14,7 +14,7 @@
 	
 	@foreach ($course->types AS $type)
 		@foreach ($type->assignments AS $assignment)
-			<th>{{$type->type}}<br/>{{$assignment->comments}}</th>
+			<th>{{$type->type}}<br/>{{link_to_action('GradesController@getAssignment', $assignment->comments, $assignment->id)}}</th>
 		@endforeach
 	@endforeach
 </tr>

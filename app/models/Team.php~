@@ -3,7 +3,7 @@
 class Team extends \Eloquent {
 	protected $fillable = [];
 	
-	public function assignment()
+	public function assignments()
 	{
 		return $this->belongsToMany('Assignment');
 	}
@@ -16,5 +16,10 @@ class Team extends \Eloquent {
 	public function students()
 	{
 		return $this->belongsToMany('Student');
+	}
+	
+	public function getStudentlistAttribute()
+	{
+		return implode(', ', $this->students()->lists('name'));
 	}
 }

@@ -48,7 +48,7 @@ class Course extends \Eloquent {
 	
 	public function getShortAttribute()
 	{
-		return "{$this->classname} ({$this->semester} {$this->year})";
+		return link_to_route('syllabus.show',"{$this->classname} ({$this->semester} {$this->year})", [$this->id]);
 	}
 	
 	public function getGoogleAttribute()

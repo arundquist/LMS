@@ -9,7 +9,7 @@ else
 <h1>{{$course->classname}}</h1>
 <h2>{{$assignment->type->type}}: {{$assignment->comments}}</h2>
 {{Form::open(['method'=>'post', 'action'=>['GradesController@postAssignment', $assignment->id]])}}
-
+{{Form::text('description', Session::get('description'), ['placeholder'=>'description'])}}
 <table class="table-striped table-bordered">
 <tbody>
 @foreach ($students AS $student)

@@ -88,6 +88,8 @@ class GradesController extends \BaseController {
 		$student=Student::findOrFail($student_id);
 		$assignment=Assignment::findOrFail($assignment_id);
 		$course=$assignment->type->course;
+		// note that $student->course doesn't work because
+		// it should be $student->courses
 		
 		if (Auth::user()->userable_type == 'Faculty')
 		{
@@ -102,11 +104,32 @@ class GradesController extends \BaseController {
 		
 		$role=Auth::user()->userable_type;
 		
-		$scores=Score::with('comments', 'links')
-			->where('student_id', $student_id)
-			->where('assignment_id', $assignment_id)
-			->orderBy('created_at', 'DESC')
-			->get();
+		// right here I'll have to deal with 
+		// assignments that are teams.
+		// if not, everything below is fine
+		// if it is a team, you need to grab
+		// all the students in the team (maybe make that a getter)
+		// and then all the scores with this assignment id
+		// and from any of those students
+		$teammates=array();
+		if ($assignment->team)
+		{
+			$teammateids=$student->teammateids($assignment_id);
+			$teammates=$student->teammates($assignment_id);
+			$scores=Score::with('comments', 'links')
+				->whereIn('student_id', $teammateids)
+				->where('assignment_id', $assignment_id)
+				->orderBy('created_at', 'DESC')
+				->get();
+		} else {
+			
+		
+			$scores=Score::with('comments', 'links')
+				->where('student_id', $student_id)
+				->where('assignment_id', $assignment_id)
+				->orderBy('created_at', 'DESC')
+				->get();
+		};
 		$allactivities=array();
 		foreach ($scores AS $score)
 		{
@@ -137,17 +160,31 @@ class GradesController extends \BaseController {
 			'scores'=>$scores,
 			'course'=>$course,
 			'allactivities'=>$allactivities,
-			'dates'=>$dates,
 			'totals'=>$totals,
-			'role'=>$role]);  
+			'role'=>$role,
+			'teammates'=>$teammates]);  
 	}
 		
 	public function postUpdatesingle($student_id, $assignment_id)
 	{
-		$recentscore=Score::where('student_id', $student_id)
+		$assignment=Assignment::findOrFail($assignment_id);
+		if ($assignment->team)
+		{
+			$student=Student::findOrFail($student_id);
+			$teammateids=$student->teammateids($assignment_id);
+			//$teammates=$student->teammates($assignment_id);
+			$recentscore=Score::whereIn('student_id', $teammateids)
 				->where('assignment_id', $assignment_id)
 				->orderBy('created_at', 'DESC')
 				->first();
+		} else {
+			
+		
+			$recentscore=Score::where('student_id', $student_id)
+				->where('assignment_id', $assignment_id)
+				->orderBy('created_at', 'DESC')
+				->first();
+		};
 		$empty=False;
 		if (count($recentscore)==0)
 			$empty=True;

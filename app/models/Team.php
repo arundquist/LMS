@@ -17,4 +17,14 @@ class Team extends \Eloquent {
 	{
 		return $this->belongsToMany('Student');
 	}
+	
+	public function getStudentlistAttribute()
+	{
+		return implode(', ', $this->students()->lists('name'));
+	}
+	
+	public function getNameAttribute()
+	{
+		return implode(', ', $this->students()->lists('name'));
+	}
 }
