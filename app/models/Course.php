@@ -20,6 +20,11 @@ class Course extends \Eloquent {
 		return $this->belongsToMany('Faculty');
 	}
 	
+	public function teams()
+	{
+		return $this->hasMany('Team');
+	}
+	
 	public function dates()
 	{
 		return $this->hasMany('Date')->orderBy('date', 'ASC');

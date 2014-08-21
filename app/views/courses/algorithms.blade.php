@@ -38,7 +38,7 @@
 			@endif
 		</td>
 		<td>
-			{{Form::textarea('typealgorithms[$assignment->id]', $type->algorithm)}}
+			{{Form::textarea("typealgorithms[$type->id]", $type->algorithm)}}
 		</td>
 	</tr>
 @endforeach

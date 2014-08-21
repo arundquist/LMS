@@ -30,7 +30,7 @@
 		?>
 		<tr>
 			<td>{{link_to_route('types.show', $type->type, [$type->id])}}</td>
-			<td>{{link_to_route('assignments.show', $assignment->comments, [$assignment->id])}}</td>
+			<td>{{link_to_action('GradesController@getSingle', $assignment->comments, ['student_id'=>$student->id,'assignment_id'=>$assignment->id])}}</td>
 			<td>{{link_to_action('GradesController@getSingle', "{$totals['s'][$assignment->id]}", ['student_id'=>$student->id, 'assignment_id'=>$assignment->id])}}</td>
 			<td>{{$totals['t'][$assignment->id]}}</td>
 		</tr>

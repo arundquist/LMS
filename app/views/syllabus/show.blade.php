@@ -30,14 +30,16 @@ $text=preg_replace('/\[(http[^\s]+)\s([^\]]+)\]/', '[${2}](${1})', $text);
 
 </div>
 <div class='col-md-4'>
-
+<ol>
 @foreach ($course->dates()->orderBy('date')->get() AS $date)
+	<li>
 	@if ($date->date->diffInDays()<8)
-		{{link_to_route('dates.show', "{$date->date->diffForHumans()}: {$date->maintopic}", [$date->id])}}<br/>
+		{{link_to_route('dates.show', "{$date->date->diffForHumans()}: {$date->maintopic}", [$date->id])}}
 	@else
-		{{link_to_route('dates.show', "{$date->date->toDateString()}: {$date->maintopic}", [$date->id])}}<br/>
+		{{link_to_route('dates.show', "{$date->date->toDateString()}: {$date->maintopic}", [$date->id])}}
 	@endif
-		@endforeach
+@endforeach
+</ol>
 </div>
 </div>
 

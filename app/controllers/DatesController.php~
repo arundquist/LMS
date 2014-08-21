@@ -2,6 +2,15 @@
 
 class DatesController extends \BaseController {
 
+	public function __construct()
+	    {
+		
+		//$this->beforeFilter('checkcorrectfaculty', ['only'=>'getWholeclass']);
+		$this->beforeFilter('auth', ['except'=>'show']);
+		
+	    }
+	
+	
 	/**
 	 * Display a listing of dates
 	 *

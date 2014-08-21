@@ -22,6 +22,11 @@ class Student extends \Eloquent {
 		return $this->hasMany('File');
 	}
 	
+	public function teams()
+	{
+		return $this->belongsToMany('Team');
+	}
+	
 	public function scores()
 	{
 		return $this->hasMany('Score');
@@ -55,17 +60,56 @@ class Student extends \Eloquent {
 	public function getTotalsnewAttribute($course_id)
 	{
 		$course=Course::findOrFail($course_id);
-		$assids=$course->assignments->lists('id');
+		//$assids=$course->assignments->lists('id');
+		$assignments=$course->assignments;
 		$s=array();
 		
-		// I need to make changes here so that it grabs the most
-		// recent numeric score if it exists
-		// One (slow) idea is to grab the most recent
-		// score for each assignment separately
-		// and set the $s variable that way
+		// I think I just need to put an if inside this foreach
+		// to check if the assignment is a team one.
+		// if it isn't, just do what's here.
+		// if it is, then you need to grab all the students 
+		// that are in the same team
+		// and then grab the most recent score with that assignment_id
+		// and belongs to one of those students
 		
-		foreach ($assids AS $assid)
+		foreach ($assignments AS $assignment)
 		{
+			if ($assignment->team)
+			{
+				// do some stuff
+				// maybe I'll do an intersect
+				// might be empty though
+				$first=$assignment->teams;
+				$second=$this->teams;
+				$actual=$first->intersect($second)->first();
+				//dd($actual);
+				if (count($actual))
+				{
+					$fellowstudents=$actual->students()->lists('student_id');
+					$recentscore=Score::where('assignment_id', $assignment->id)
+							->whereIn('student_id', $fellowstudents)
+							->whereRaw("score REGEXP '^[0-9\.]+$'")
+							->orderBy("updated_at", 'DESC')
+							->first();
+					if (count($recentscore) > 0)
+						$s[$assignment->id]=$recentscore->score;
+				};
+			} else {
+				$assid=$assignment->id;
+				$recentscore=$this->scores()
+						->whereRaw("score REGEXP '^[0-9\.]+$'")
+						->where("assignment_id", $assid)
+						->orderBy("updated_at", 'DESC')
+						->first();
+				if (count($recentscore) > 0)
+					$s[$assid]=$recentscore->score;
+			};
+		};
+		
+		/* foreach ($assids AS $assid)
+		{
+			if (
+			
 			$recentscore=$this->scores()
 					->whereRaw("score REGEXP '^[0-9\.]+$'")
 					->where("assignment_id", $assid)
@@ -73,7 +117,7 @@ class Student extends \Eloquent {
 					->first();
 			if (count($recentscore) > 0)
 				$s[$assid]=$recentscore->score;
-		};
+		}; */
 		
 		// this next commented out line gets one score
 		// for each assignment but it's not clear if it's the 
@@ -132,6 +176,32 @@ class Student extends \Eloquent {
 		//I'm passing $sactual so that missing scores are missing instead of zero
 		$wholething=['s'=>$sactual, 't'=>$t, 'totals'=>$totals, 't2'=>$t2];
 		return $wholething;
+	}
+	
+	public function teammates($assignment_id)
+	{
+		$first=Assignment::findOrFail($assignment_id)->teams;
+		$second=$this->teams;
+		$actual=$first->intersect($second)->first();
+		if (count($actual))
+		{
+			return $actual->students;
+		} else {
+			return [];
+		};
+	}
+	
+	public function teammateids($assignment_id)
+	{
+		$first=Assignment::findOrFail($assignment_id)->teams;
+		$second=$this->teams;
+		$actual=$first->intersect($second)->first();
+		if (count($actual))
+		{
+			return $actual->students()->lists('student_id');
+		} else {
+			return [];
+		};
 	}
 	
 	public function getTotalsAttribute()

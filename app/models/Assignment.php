@@ -15,6 +15,11 @@ class Assignment extends \Eloquent {
 		return $this->belongsTo('Type');
 	}
 	
+	public function teams()
+	{
+		return $this->belongsToMany('Team');
+	}
+	
 	public function date()
 	{
 		return $this->belongsTo('Date');

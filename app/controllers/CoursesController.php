@@ -40,6 +40,8 @@ class CoursesController extends \BaseController {
 
 		$course=Course::create($data);
 		$course->faculties()->sync([Auth::user()->userable_id]);
+		$course->algorithm='';
+		$course->save();
 
 		return Redirect::route('syllabus.show',[$course->id]);
 		
@@ -286,13 +288,18 @@ class CoursesController extends \BaseController {
 		$coursealgo=$course->algorithm;
 		$coursealgo->algorithm = Input::get('coursealgorithm');
 		$coursealgo->save();
+		
 		foreach ($types AS $type)
 		{
-			$type->algorithm=Input::get("typealgorithms[{$type->id}]");
+			$type->algorithm=Input::get("typealgorithms")[$type->id];
 			$type->save();
 		};
-		foreach (Input::get('deletetypes') AS $key=>$value)
-			Type::findOrFail($key)->delete();
+		$dtypes=Input::get('deletetypes');
+		if (isset($dtypes))
+		{
+			foreach (Input::get('deletetypes') AS $key=>$value)
+				Type::findOrFail($key)->delete();
+		};
 		return Redirect::to(action('CoursesController@getAlgorithms', [$course_id]));
 	}
 	
@@ -332,6 +339,132 @@ class CoursesController extends \BaseController {
 			['in'=>$in,
 			'roles'=>$role]);
 		
+	}
+	
+	public function getMaketeams($course_id, $assignment_id)
+	{
+		$course=Course::with('teams', 'teams.students', 'students')->findOrFail($course_id);
+		$assignment=Assignment::with('teams')->findOrFail($assignment_id);
+		// make an array that's like 'student_id'=>'team number'
+		$teamarray=array();
+		$currentteams=$assignment->teams;
+		foreach ($currentteams AS $team)
+		{
+			foreach ($team->students AS $student)
+			{
+				$teamarray[$student->id]=$team->id;
+			};
+		};
+		// at this point some students *might* not be in a team
+		$roster=$course->students;
+		foreach ($roster AS $student)
+		{
+			$teamarray=array_add($teamarray, $student->id, '');
+		};
+		
+		
+		// I think I need to return team sets to choose from
+		// do that by grabbing assignments and associated teams
+		
+		$assignmentswithteams=$course->assignments()->has('teams')
+			->with('teams')->get();
+			
+		
+		
+		return View::make('courses.maketeams', 
+			['course'=>$course,
+			'assignment'=>$assignment,
+			'roster'=>$roster,
+			'currentteams'=>$currentteams,
+			'assignmentswithteams'=>$assignmentswithteams,
+			'teamarray'=>$teamarray]);
+	}
+	
+	public function postMaketeams($course_id, $assignment_id)
+	{
+		$course=Course::with('teams')->findOrFail($course_id);
+		$assignment=Assignment::findOrFail($assignment_id);
+		$teamset=Input::get('newteamset');
+		$newteams=array();
+		if (isset($teamset))
+		{
+			//this means a teamset has been chosen
+			// $teamset will be the assignment id
+			// so grab all those teams and associate
+			// them with the current assignment id
+			$teams=Assignment::findOrFail($teamset)->teams()->select('team_id AS tid')->lists('tid');
+			$assignment->teams()->sync($teams);
+		} else
+		{
+			// here we take whatever was given for the roster
+			// need an array of students for each team that exists
+			$existingteams=$assignment->teams;
+			$teamlists=array();
+			foreach ($existingteams AS $team)
+			{
+				//$teamlists[$team->id]=$team->students()->select('id as sid')->lists('sid');
+				$teamlists[$team->id]=array();
+			};
+			foreach (Input::get('team') AS $student_id => $newteam)
+			{
+				if ($newteam != '') // if it's blank, don't do anything
+				{
+					if (array_key_exists($newteam, $newteams))
+					{
+						//Student::find($student_id)->teams()->sync([$newteams[$newteam]], false);
+						$teamlists[$newteams[$newteam]][]=$student_id;
+					} else {
+						//$possibleteam=Team::find($newteam); //problematic if team isn't associated with assignment
+						if (array_key_exists($newteam, $teamlists))
+						{
+							$teamlists[$newteam][]=$student_id;
+						} else {
+							$team=new Team;
+							$team->description=$newteam;
+							//$team->assignment_id=$assignment->id;
+							$team->course_id=$course->id;
+							$team->save();
+							$team->assignments()->attach($assignment->id);
+							$teamlists[$team->id][]=$student_id;
+							$newteams[$newteam]=$team->id;
+						};
+					};
+				};
+			};
+			foreach ($teamlists AS $team_id => $studentlist)
+			{
+				Team::find($team_id)->students()->sync($studentlist);
+			};
+			// what about deleting teams that aren't present any more?
+			// right now it makes a team with no students
+			$emptyteams=$assignment->teams()->has('students', '==', 0)->get();
+			foreach ($emptyteams AS $team)
+			{
+				$team->assignments()->sync([]);
+				$team->delete();
+			};
+		};
+		return Redirect::to(action('CoursesController@getMaketeams', [$course_id, $assignment_id]));
+		// need to figure out how to deal with letters
+		// if letters, make a bunch of new teams assuming it's not ''
+		// so if 'A', check if that's already been made
+		// if so, just add the student to that team
+		// if not, make that team and add the student
+		// and somehow add that team to the list to be checked
+		// in the next iteration
+		// if '', don't do anything
+		// if it's a number, grab that team and add the student
+		// Another thought for the stuff above is once 'A' is made, 
+		// replace all 'A's in the array with the new team id.
+		// Then the "if it's a number" approach will just work
+		
+		// on the other hand, if other teams are selected
+		// just use those and ignore the teams.
+		// there's still a problem with one student being on
+		// multiple teams for the same assignment, though.
+		
+		// I think I should change the form so that you can select
+		// collections of teams (like ones for other assignments)
 	}
 
 }

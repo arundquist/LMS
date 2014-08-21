@@ -218,26 +218,42 @@ class GradesController extends \BaseController {
 	public function postAssignment($assignment_id)
 	{
 		$assignment=Assignment::findOrFail($assignment_id);
+		$scorelist=array();
 		foreach (Input::get('score') AS $student_id => $score)
 		{
-			if ($score='')
+			if ($score=='')
 			{
 				if (Input::get('scoreids')[$student_id] != '')
 				{
-					// here I delete the score
-				}:
+					Score::find(Input::get('scoreids')[$student_id])
+						->delete();
+				};
 			} else
 			{
 				if (Input::get('scoreids')[$student_id] != '')
 				{
 					// update the score
+					$scoremodel=Score::find(Input::get('scoreids')[$student_id]);
+					
 				} else
 				{
 					// create the score
+					$scoremodel=new Score;
+					
 				};
+				$scoremodel->score=$score;
+				$scoremodel->assignment_id=$assignment_id;
+				$scoremodel->student_id=$student_id;
+				$scoremodel->description=Input::get('description');
+				$scoremodel->save();
+				$scorelist[$student_id]=['score'=>$score,
+							'id'=>$scoremodel->id];
 			};
+			
+		};
 		return Redirect::to(action('GradesController@getAssignment', [$assignment_id]))
-			->with('scorelist', $ids);
+			->with('scorelist', $scorelist)
+			->with('description', Input::get('description'));
 	}
 
 

@@ -8,11 +8,16 @@ class Assignment extends \Eloquent {
 	];
 
 	// Don't forget to fill this array
-	protected $fillable = [];
+	protected $fillable = ['comments', 'details', 'type_id', 'duedate', 'total'];
 	
 	public function type()
 	{
 		return $this->belongsTo('Type');
+	}
+	
+	public function teams()
+	{
+		return $this->hasMany('Team');
 	}
 	
 	public function date()

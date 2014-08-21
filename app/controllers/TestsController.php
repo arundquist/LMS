@@ -131,5 +131,49 @@ class TestsController extends \BaseController {
 			'body'=>$body]);   
 	}
 	
+	public function getTestarraymap()
+	{
+		$a=['sdfjkl'=>'a',
+		'wourei'=>'A',
+		'xcvcvx'=>12];
+		$replace=19;
+		foreach ($a AS $key=>$value)
+		{
+			if($value=='A')
+			{
+				$a[$key]=$replace;
+			};
+		};
+		dd($a);
+	}
+	
+	public function getTestarrayintersect()
+	{
+		$first=Student::find(1270)->teams;
+		$second=Assignment::find(1177)->teams;
+		$found=$first->intersect($second);
+		dd($found);
+	}
+	
+	public function getTestsingle()
+	{
+		$student=Student::find(1270);
+		dd($student);
+	}
+	
+	public function getTestteammateids()
+	{
+		$student=Student::find(1272);
+		dd($student->teammateids(1177));
+	}
+	
+	public function getFixalgorithms()
+	{
+		$courses=Course::with('algorithm')->has('algorithm','==',0)->get();
+		foreach ($courses AS $course)
+		{
+			$course->algorithm='';
+		};
+	}
 
 }

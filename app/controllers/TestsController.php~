@@ -112,10 +112,53 @@ class TestsController extends \BaseController {
 	{
 		$course=Course::findOrFail($course_id);
 		$matches=$course->google;
-		if (count($matches)==1) //regular syllabus
-			return Markdown::render($matches[1]);
+		// if $matches has just one element, it's ready for markdown
+		// if it has more, then the second one is the style and the third is the html 
+		// from google
+		//dd(count($matches));
+		if (count($matches)==1) // just markdown
+		{
+			$head='';
+			$body=$matches[0];
+		}
 		else
-			return 
+		{
+			$head=$matches[1];
+			$body=$matches[2];
+		};
+		return View::make('tests.googlesyllabus',
+			['head'=>$head,
+			'body'=>$body]);   
+	}
+	
+	public function getTestarraymap()
+	{
+		$a=['sdfjkl'=>'a',
+		'wourei'=>'A',
+		'xcvcvx'=>12];
+		$replace=19;
+		foreach ($a AS $key=>$value)
+		{
+			if($value=='A')
+			{
+				$a[$key]=$replace;
+			};
+		};
+		dd($a);
+	}
+	
+	public function getTestarrayintersect()
+	{
+		$first=Student::find(1270)->teams;
+		$second=Assignment::find(1177)->teams;
+		$found=$first->intersect($second);
+		dd($found);
+	}
+	
+	public function getTestsingle()
+	{
+		$student=Student::find(1270);
+		dd($student);
 	}
 	
 
