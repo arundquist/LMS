@@ -172,7 +172,7 @@ class TestsController extends \BaseController {
 		$courses=Course::with('algorithm')->has('algorithm','==',0)->get();
 		foreach ($courses AS $course)
 		{
-			$course->algorithm='';
+			$course->algorithm->algorithm='';
 		};
 	}
 
