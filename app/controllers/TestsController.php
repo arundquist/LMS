@@ -179,5 +179,14 @@ class TestsController extends \BaseController {
 			$alg->save();
 		};
 	}
+	
+	public function getTesteval()
+	{
+		$totals=array();
+		$totals[-2]='3';
+		$bigfull="\$totals[-1]=30;";
+		eval($bigfull);
+		dd($totals);
+	}
 
 }

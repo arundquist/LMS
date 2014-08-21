@@ -170,11 +170,21 @@ class Student extends \Eloquent {
 				eval($alg);
 			};
 		};
-		$bigfull=preg_replace("/(s|t|totals)\[([0-9]+)\]/", "\$\\1[\\2]", $course->algorithm->algorithm);
+		if ($course->algorithm->algorithm =='')
+		{
+			$coursealg='0';
+		} else
+		{
+			$coursealg=$course->algorithm->algorithm;
+		};
+		$bigfull=preg_replace("/(s|t|totals)\[([0-9]+)\]/", "\$\\1[\\2]", $coursealg);
+		//dd($bigfull);
 		$bigfull="\$totals[-1]=$bigfull;";
 		eval($bigfull);
+		
 		//I'm passing $sactual so that missing scores are missing instead of zero
 		$wholething=['s'=>$sactual, 't'=>$t, 'totals'=>$totals, 't2'=>$t2];
+		//dd($wholething);
 		return $wholething;
 	}
 	
