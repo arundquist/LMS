@@ -199,5 +199,11 @@ class TestsController extends \BaseController {
 			echo "<br/>";
 		};
 	}
+	
+	public function getTestroster($course_id)
+	{
+		$course=Course::findOrFail($course);
+		dd($course->students);
+	}
 
 }

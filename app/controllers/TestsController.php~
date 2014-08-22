@@ -188,5 +188,16 @@ class TestsController extends \BaseController {
 		eval($bigfull);
 		dd($totals);
 	}
+	
+	public function getTestkeychange()
+	{
+		$a=['a'=>1, 'b'=>2];
+		foreach ($a AS $key=>$value)
+		{
+			$key=1;
+			echo $value;
+			echo "<br/>";
+		};
+	}
 
 }
