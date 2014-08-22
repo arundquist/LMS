@@ -300,5 +300,13 @@ class TestsController extends \BaseController {
 		};
 		
 	}
+	
+	public function getMailto($course_id)
+	{
+		$studentemails=Course::findOrFail($course_id)->students()->lists('email');
+		$arg="arundquist@hamline.edu?bcc=";
+		$arg.=implode(',',$studentemails);
+		echo HTML::mailto($arg,'hi there');
+	}
 
 }

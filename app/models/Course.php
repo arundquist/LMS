@@ -66,5 +66,13 @@ class Course extends \Eloquent {
 			return [$this->syllabus];
 		};
 	}
+	
+	public function getClassemailAttribute()
+	{
+		$studentemails=$this->students()->lists('email');
+		$arg="arundquist@hamline.edu?bcc=";
+		$arg.=implode(',',$studentemails);
+		return HTML::mailto($arg,'email class');
+	}
 
 }

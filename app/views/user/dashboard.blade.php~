@@ -3,7 +3,7 @@
 <h1>Welcome {{$user->userable->name}} ({{$user->userable_type}})</h1>
 
 
-<p>Your courses</p>
+<p>Your courses {{link_to_action('CoursesController@getCreate', 'or create a new one')}}</p>
 <table class='table table-striped table-bordered'>
 	@foreach ($user->userable->courses AS $course)
 		<tr>

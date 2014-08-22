@@ -13,6 +13,7 @@
 				{{link_to_action('CoursesController@getAdddates',"dates", [$course->id])}} 
 				{{link_to_action('CoursesController@getAlgorithms',"Algorithms", [$course->id])}}
 				{{link_to_action('CoursesController@getGroups', "Groups", [$course->id])}}
+				{{$course->classemail}}
 			@endif
 			
 			
