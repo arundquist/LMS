@@ -40,7 +40,10 @@ class CoursesController extends \BaseController {
 
 		$course=Course::create($data);
 		$course->faculties()->sync([Auth::user()->userable_id]);
-		$course->algorithm='';
+		$alg=new Algorithm;
+		$alg->course_id=$course->id;
+		$alg->algorithm='';
+		$alg->save();
 		$course->save();
 
 		return Redirect::route('syllabus.show',[$course->id]);

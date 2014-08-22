@@ -224,6 +224,12 @@ class CoursesController extends \BaseController {
 				$user=User::firstOrNew(['username'=>$newstudent['username']]);
 				// I guess I'll assume that fac and students will
 				// always have different ids. Probably a mistake
+				
+				// if the user exists, there must be an existing
+				// student as well. I should grab that one
+				// instead of looking below at whether the 
+				// student already exists in the course
+				
 				if (!isset($user->password))
 					$user->password=Hash::make($newstudent['username']);
 				$user->userable_type="Student";
@@ -232,13 +238,22 @@ class CoursesController extends \BaseController {
 				// this next line doesn't work because firstOrNew
 				// doesn't work on chains like this
 				//$stu=$course->students()->firstOrNew(['hamlineid'=>$newstudent['username']]);
-				if ($foundkey=array_search($newstudent['username'], $studenthamlineidlist))
+				/* if ($foundkey=array_search($newstudent['username'], $studenthamlineidlist))
 				{
 					// it found the student
 					$stu=Student::find($foundkey);
 				} else
 				{
 					$stu = New Student;
+				}; */
+				
+				if (count($user->student))
+				{
+					//it found the student
+					$stu=$user->student;
+				} else
+				{
+					$stu = New student;
 				};
 				
 				$stu->name=$newstudent['name'];

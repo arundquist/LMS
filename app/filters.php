@@ -121,6 +121,22 @@ Route::filter('authFaculty', function()
 	}
 });
 
+Route::filter('authAdmin', function()
+{
+	if ((Auth::guest()) || (Auth::user()->id != 604))
+	{
+		if (Request::ajax())
+		{
+			return Response::make('Unauthorized', 401);
+		}
+		else
+		{
+			
+			return Redirect::guest(action('UsersController@getLogin'));
+		}
+	}
+});
+
 Route::filter('checkcorrectfaculty', function($route, $request)
 	{
 		$course=Course::findOrFail(Request::segment(3));

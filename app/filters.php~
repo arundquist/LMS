@@ -46,7 +46,13 @@ Route::filter('auth', function()
 			
 			return Redirect::guest(action('UsersController@getLogin'));
 		}
-	}
+	} else
+	{
+		if (Hash::check(Auth::user()->username, Auth::user()->password))
+		{
+			return Redirect::to(action('UsersController@getChangepassword'));
+		};
+	};
 });
 
 
