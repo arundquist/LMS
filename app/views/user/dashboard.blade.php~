@@ -11,7 +11,8 @@
 			@if ($user->userable_type == "Faculty")
 				{{link_to_action('CoursesController@getAddroster',"roster", [$course->id])}} 
 				{{link_to_action('CoursesController@getAdddates',"dates", [$course->id])}} 
-				{{link_to_action('CoursesController@getAlgorithms',"Algorithms", [$course->id])}} 
+				{{link_to_action('CoursesController@getAlgorithms',"Algorithms", [$course->id])}}
+				{{link_to_action('CoursesController@getGroups', "Groups", [$course->id])}}
 			@endif
 			
 			
