@@ -205,7 +205,7 @@ class TestsController extends \BaseController {
 		$course=Course::findOrFail($course_id);
 		foreach ($course->students AS $student)
 		{
-			echo "{$student->name}: {$student->user->username}, {$student->email}<br/>";
+			echo "{$student->name}<br/>";
 		};
 	}
 
