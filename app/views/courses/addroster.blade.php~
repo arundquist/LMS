@@ -6,7 +6,8 @@
 <p>Current Students</p>
 <ul class="list-group">
 @foreach ($students AS $student)
-	<li class="list-group-item">{{Form::checkbox('delete[]', $student->id)}} {{$student->name}}</li>
+	<li class="list-group-item">{{Form::checkbox('delete[]', $student->id)}} {{$student->name}} 
+					{{HTML::mailto($student->email)}} {{$student->user->username}}</li>
 @endforeach
 </ul>
 </div>

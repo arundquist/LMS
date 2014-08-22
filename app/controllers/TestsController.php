@@ -203,7 +203,10 @@ class TestsController extends \BaseController {
 	public function getTestroster($course_id)
 	{
 		$course=Course::findOrFail($course_id);
-		dd($course->students);
+		foreach ($course->students AS $student)
+		{
+			echo "{$student->name}: {$student->user->username}, {$student->email}<br/>";
+		};
 	}
 
 }
