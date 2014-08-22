@@ -13,13 +13,6 @@
 		<li>{{$name}} ({{$roles[$key]}})</li>
 	@endforeach
 	</ul>
-	<hr/>
-	<ul>
-	<?php asort($roles); ?>
-	@foreach ($roles AS $key=>$role)
-		<li>{{$role}}:  {{$in[$key]}}</li>
-	@endforeach
-	</ul>
 @else
 {{Form::open(['method'=>'post', 'action'=>['CoursesController@postGroups']])}}
 <ul class="list-group">
