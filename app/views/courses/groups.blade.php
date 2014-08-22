@@ -3,6 +3,22 @@
 
 	<style>
 		ul {-webkit-column-count:3}
+		#my-div
+		{
+		    width    : 600px;
+		    height   : 350px;
+		    overflow : hidden;
+		    position : relative;
+		}
+		 
+		#my-iframe
+		{
+		    position : absolute;
+		    top      : -200px;
+		    left     : -50px;
+		    width    : 1280px;
+		    height   : 1200px;
+		}
 	</style>
 
 @stop
@@ -13,6 +29,12 @@
 		<li>{{$name}} ({{$roles[$key]}})</li>
 	@endforeach
 	</ul>
+	<hr/>
+	<div id="my-div">
+	<iframe src="http://www.rrrather.com/" id="my-iframe" scrolling="no"></iframe>
+	
+	</div>
+	From {{HTML::link('http://www.rrrather.com')}}
 	<hr/>
 	<ul>
 	<?php asort($roles); ?>
