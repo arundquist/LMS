@@ -202,7 +202,7 @@ class TestsController extends \BaseController {
 	
 	public function getTestroster($course_id)
 	{
-		$course=Course::findOrFail($course);
+		$course=Course::findOrFail($course_id);
 		dd($course->students);
 	}
 
