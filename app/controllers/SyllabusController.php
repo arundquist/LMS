@@ -26,6 +26,7 @@ class SyllabusController extends \BaseController {
 	public function show($id)
 	{
 		$course=Course::findOrFail($id);
+		Carbon::setToStringFormat('D M n');
 		$matches=$course->google;
 		// if $matches has just one element, it's ready for markdown
 		// if it has more, then the second one is the style and the third is the html 
