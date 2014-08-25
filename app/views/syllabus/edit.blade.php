@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('main')
 {{Form::model($course, ['route'=>['syllabus.update', $course->id], 'method'=>'put'])}}
+{{link_to_route('syllabus.show', 'student view', [$course->id])}}
 <div>
 {{Form::label('classname', 'Class Name')}}
 {{Form::text('classname')}}
