@@ -25,7 +25,7 @@ $text=$date->details;
 //fix links:
 $text=preg_replace('/\[(http[^\s]+)\s([^\]]+)\]/', '[${2}](${1})', $text);
 ?>
-{{Markdown::render($text)}}
+{{Helpers\replacegoogle($text)}}
 
 <p>{{link_to_route('dates.edit', "edit", [$date->id])}}</p>
 

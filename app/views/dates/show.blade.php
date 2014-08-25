@@ -24,6 +24,7 @@ Due today:
 $text=$date->details;
 //fix links:
 $text=preg_replace('/\[(http[^\s]+)\s([^\]]+)\]/', '[${2}](${1})', $text);
+$text=preg_replace('/cq\(([0-9]+)\)/', '[concept quiz ${1}](http://physics.hamline.edu/~arundquist/cqs/cqs/${1})', $text);
 ?>
 {{Helpers\replacegoogle($text)}}
 
