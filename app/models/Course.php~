@@ -73,6 +73,6 @@ class Course extends \Eloquent {
 		$arg="arundquist@hamline.edu?bcc=";
 		$arg.=implode(',',$studentemails);
 		return HTML::mailto($arg,'email class');
-	};
+	}
 
 }

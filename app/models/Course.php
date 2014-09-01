@@ -71,6 +71,8 @@ class Course extends \Eloquent {
 	{
 		$studentemails=$this->students()->lists('email');
 		$arg="arundquist@hamline.edu?bcc=";
+		$arg=Auth::user()->userable->email;
+		$arg.="?bcc=";
 		$arg.=implode(',',$studentemails);
 		return HTML::mailto($arg,'email class');
 	}

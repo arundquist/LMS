@@ -4,9 +4,16 @@
 <h1>{{$student->name}}</h1>
 <h2>{{$assignment->type->type}}: {{$assignment->comments}}</h2>
 <p>{{$assignment->details}}</p>
+@if (count($teammates))
+	<p>Teammates: {{implode(', ', $teammates->lists('name'))}}</p>
+@endif
 
 <h3>Activity:</h3>
-{{Form::model(reset($scores)[0], ['action'=>['GradesController@postUpdatesingle',$student->id, $assignment->id]])}}
+@if (count($scores))
+	{{Form::model(reset($scores)[0], ['action'=>['GradesController@postUpdatesingle',$student->id, $assignment->id]])}}
+@else
+	{{Form::open(['action'=>['GradesController@postUpdatesingle',$student->id, $assignment->id]])}}
+@endif
 @if ($role=='Faculty')
 	<div>
 		<div>

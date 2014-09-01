@@ -5,7 +5,12 @@
 <h2>{{$assignment->type->type}}: {{$assignment->comments}}</h2>
 <p>{{$assignment->details}}</p>
 @if (count($teammates))
-	<p>Teammates: {{implode(', ', $teammates->lists('name'))}}</p>
+	<p>Teammates: 
+	@foreach ($teammates AS $teammate)
+		{{HTML::mailto($teammate->email,$teammate->name)}}
+	@endforeach
+	or {{HTML::mailto(implode(',', $teammates->lists('email')), 'email all')}}
+	</p>
 @endif
 
 <h3>Activity:</h3>
