@@ -38,6 +38,7 @@ $text=preg_replace('/\[(http[^\s]+)\s([^\]]+)\]/', '[${2}](${1})', $text);
 	@else
 		{{link_to_route('dates.show', "{$date->date}: {$date->maintopic}", [$date->id])}}
 	@endif
+	</li>
 @endforeach
 </ol>
 </div>

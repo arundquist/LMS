@@ -36,7 +36,7 @@ $text=preg_replace('/\[(http[^\s]+)\s([^\]]+)\]/', '[${2}](${1})', $text);
 	@if ($date->date->diffInDays()<8)
 		{{link_to_route('dates.show', "{$date->date->diffForHumans()}: {$date->maintopic}", [$date->id])}}
 	@else
-		{{link_to_route('dates.show', "{$date->date->toDateString()}: {$date->maintopic}", [$date->id])}}
+		{{link_to_route('dates.show', "{$date->date}: {$date->maintopic}", [$date->id])}}
 	@endif
 @endforeach
 </ol>

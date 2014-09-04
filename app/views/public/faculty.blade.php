@@ -12,7 +12,7 @@
 	<ul class="list-group">
 		@foreach ($faculty->courses AS $course)
 			<li class="list-group-item">
-				{{link_to_route('syllabus.show', $course->short, [$course->id])}}
+				{{$course->short}}
 			</li>
 		@endforeach
 	</ul>
