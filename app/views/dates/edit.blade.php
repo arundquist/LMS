@@ -40,7 +40,7 @@
 			{{Form::text("asslist[$assignment->id][newtype]", "")}}
 			
 			{{Form::label("asslist[$assignment->id]['team']", "team (0 or 1)")}}
-			{{Form::text("asslist[$assignment->id][team]", "0")}}
+			{{Form::text("asslist[$assignment->id][team]", $assignment->team)}}
 		
 			{{Form::label("asslist[$assignment->id]['duedate']", "due date")}}
 			{{Form::text("asslist[$assignment->id][duedate]", $assignment->duedate, ['class'=>'datepick'])}}

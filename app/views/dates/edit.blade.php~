@@ -38,6 +38,9 @@
 		
 			{{Form::label("asslist[$assignment->id]['newtype']", "or new type")}}
 			{{Form::text("asslist[$assignment->id][newtype]", "")}}
+			
+			{{Form::label("asslist[$assignment->id]['team']", "team (0 or 1)")}}
+			{{Form::text("asslist[$assignment->id][team]", "0")}}
 		
 			{{Form::label("asslist[$assignment->id]['duedate']", "due date")}}
 			{{Form::text("asslist[$assignment->id][duedate]", $assignment->duedate, ['class'=>'datepick'])}}
@@ -62,6 +65,9 @@
 		
 			{{Form::label("asslist[-1]['newtype']", "or new type")}}
 			{{Form::text("asslist[-1][newtype]", "")}}
+			
+			{{Form::label("asslist[-1]['team']", "team (0 or 1)")}}
+			{{Form::text("asslist[-1][team]", "0")}}
 		
 			{{Form::label("asslist[-1]['duedate']", "due date")}}
 			{{Form::text("asslist[-1][duedate]", null, ['class'=>'datepick'])}}
