@@ -118,6 +118,7 @@ class DatesController extends \BaseController {
 			$assignment->comments=$assignmentdata['comments'];
 			$assignment->details=$assignmentdata['details'];
 			$assignment->total=$assignmentdata['total'];
+			$assignment->team=$assignmentdata['team'];
 			$assignment->duedate=$assignmentdata['duedate'];
 			$assignment->date_id=$date->id;
 			if ($assignmentdata['newtype'] != '')
