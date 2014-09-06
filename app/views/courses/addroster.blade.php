@@ -7,7 +7,9 @@
 <ul class="list-group">
 @foreach ($students AS $student)
 	<li class="list-group-item">{{Form::checkbox('delete[]', $student->id)}} {{$student->name}} 
-					{{HTML::mailto($student->email)}} {{$student->user->username}}</li>
+					{{HTML::mailto($student->email)}} {{$student->user->username}}
+					{{link_to_action('CoursesController@getResetstudentpassword',
+					'reset password', [$course->id, $student->user->id])}}</li>
 @endforeach
 </ul>
 </div>

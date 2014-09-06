@@ -223,7 +223,8 @@ class CoursesController extends \BaseController {
 		//dd($newstudents);
 		If (count($newstudents)>0)
 		{
-			$syncids=array();
+			//$syncids=array();
+			$syncids=$currentstudentids;
 			foreach ($newstudents AS $newstudent)
 			{
 				$user=User::firstOrNew(['username'=>$newstudent['username']]);

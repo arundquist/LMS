@@ -2,6 +2,7 @@
 @section('main')
 <div class='jumbotron'>
 	<h1>Welcome!</h1>
+	<p>{{HTML::link('http://screencast.com/t/62YLrskVS', 'how to use this')}}</p>
 	<table class="table">
 		<tr>
 			<td>Syllabi for faculty

@@ -490,5 +490,27 @@ class CoursesController extends \BaseController {
 		// I think I should change the form so that you can select
 		// collections of teams (like ones for other assignments)
 	}
+	
+	// make a link to reset a student's password that takes their user_id
+	// it should check to make sure the student is in a class taught by the logged
+	// in faculty.  I'll do that be passing the class_id as well
+	
+	public function getResetstudentpassword($class_id, $u_id)
+	{
+		$curfac=Faculty::findOrFail(Auth::user()->userable_id);
+		$classes=$curfac->courses->lists('id');
+		if (!in_array($class_id, $classes))
+			return "oops, this isn't one of your classes";
+		$course=Course::findOrFail($class_id);
+		$uids=array();
+		foreach ($course->students AS $student)
+			$uids[]=$student->user->id;
+		if (!in_array($u_id, $uids))
+			return "oops, this student isn't in this class";
+		$user=User::findOrFail($u_id);
+	 	$user->password=Hash::make($user->username);
+	 	$user->save();
+	 	return Redirect::to(action('UsersController@getDashboard'));
+	}
 
 }

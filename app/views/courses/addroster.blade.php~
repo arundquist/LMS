@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('main')
-<h1>Roster for {{$course->classname}} ({{$course->semester}} {{$course->year}})</h1>
+<h1>Roster for {{$course->short}})</h1>
 {{Form::open(['method'=>'post', 'action'=>['CoursesController@postAddroster', $course->id]])}}
 <div class="col-md-3">
 <p>Current Students</p>

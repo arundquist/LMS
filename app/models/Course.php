@@ -63,7 +63,7 @@ class Course extends \Eloquent {
 		else
 		{
 			
-			return [$this->syllabus];
+			return [Markdown::render($this->syllabus)];
 		};
 	}
 	

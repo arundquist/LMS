@@ -73,7 +73,7 @@ class SyllabusController extends \BaseController {
 			$date->maintopic=$maintopic;
 			$date->save();
 		};
-		return Redirect::route('syllabus.show',[$id]);
+		return Redirect::route('syllabus.edit',[$id]);
 	
 	}
 

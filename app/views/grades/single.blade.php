@@ -56,7 +56,7 @@
 	@if($score->score != 'pending')
 		by {{$score->user->userable->name}}
 	@endif
-		: {{$score->score}}</td></tr>
+		: {{$score->score}} {{$score->description}}</td></tr>
 	@if (array_key_exists($score->id, $allactivities))
 		@foreach ($allactivities[$score->id] AS $activity)
 			@if ($activity['type']=='Comment')
