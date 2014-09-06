@@ -184,6 +184,11 @@ class CoursesController extends \BaseController {
 		};
 		$studentsincourse=$course->students();
 		$studenthamlineidlist=array();
+		// right here you need to make an array
+		// or student ids and add them to the
+		// new ones below before syncing.
+		// right now all old students are getting deleted
+		$currentstudentids=$course->students->lists('id');
 		foreach ($studentsincourse AS $studentincourse)
 		{
 			$studenthamlineidlist[$studentincourse->id]=$studentincourse->hamlineid;
@@ -218,7 +223,8 @@ class CoursesController extends \BaseController {
 		//dd($newstudents);
 		If (count($newstudents)>0)
 		{
-			$syncids=array();
+			//$syncids=array();
+			$syncids=$currentstudentids;
 			foreach ($newstudents AS $newstudent)
 			{
 				$user=User::firstOrNew(['username'=>$newstudent['username']]);
