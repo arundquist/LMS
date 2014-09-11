@@ -61,8 +61,10 @@ class DatesController extends \BaseController {
 	public function show($id)
 	{
 		$date = Date::findOrFail($id);
-		$dueassignments=Assignment::where('duedate', $date->date->startOfDay())->get();
-
+		//$dueassignments=Assignment::where('duedate', $date->date->startOfDay())->get();
+		//dd($date->course->assignments);
+		$dueassignments=$date->course->assignments()
+			->where('duedate', $date->date->startOfDay())->get();
 		return View::make('dates.show', 
 			['date'=>$date,
 			 'dueassignments'=>$dueassignments]);

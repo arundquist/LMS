@@ -78,7 +78,20 @@ class DatesController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+		
 		$date = Date::with('course', 'assignments')->find($id);
+		$course=$date->course;
+		
+		if (Auth::user()->userable_type == 'Faculty')
+		{
+			$facids=$course->faculties->lists('id');
+			if (!in_array(Auth::user()->userable_id, $facids))
+				return "sorry, you're not a faculty member for this course";
+		} elseif (Auth::user()->userable_type='Student')
+		{
+			return "sorry, faculty only";
+		};
+		
 		$types=$date->course->types->lists('type','id');
 
 		return View::make('dates.edit', 
