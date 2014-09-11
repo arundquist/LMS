@@ -197,6 +197,12 @@ class GradesController extends \BaseController {
 			$recentscore=new Score;
 			$recentscore->student_id=$student_id;
 			$recentscore->assignment_id=$assignment_id;
+			// decided to add these next two lines
+			// because otherwise comments without scores
+			// show blanks for the scores
+			$recentscore->score="pending";
+			$recentscore->description="comment";
+			
 			$recentscore->save();
 		};
 		

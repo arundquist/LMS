@@ -88,7 +88,7 @@ class Student extends \Eloquent {
 					$fellowstudents=$actual->students()->lists('student_id');
 					$recentscore=Score::where('assignment_id', $assignment->id)
 							->whereIn('student_id', $fellowstudents)
-							->whereRaw("score REGEXP '^[0-9\.]+$'")
+							//->whereRaw("score REGEXP '^[0-9\.]+$'")
 							->orderBy("updated_at", 'DESC')
 							->first();
 					if (count($recentscore) > 0)
@@ -97,7 +97,7 @@ class Student extends \Eloquent {
 			} else {
 				$assid=$assignment->id;
 				$recentscore=$this->scores()
-						->whereRaw("score REGEXP '^[0-9\.]+$'")
+						//->whereRaw("score REGEXP '^[0-9\.]+$'")
 						->where("assignment_id", $assid)
 						->orderBy("updated_at", 'DESC')
 						->first();
@@ -124,7 +124,7 @@ class Student extends \Eloquent {
 		// most recent and not clear if it's numeric
 		//$s=$this->scores()->whereIn('assignment_id', $assids)->lists("score", "assignment_id");
 		$sactual=$s;
-		
+		//dd($sactual);
 		$testlist=$course->assignments;
 		$t=array();
 		$totals=array();

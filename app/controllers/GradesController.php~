@@ -245,7 +245,13 @@ class GradesController extends \BaseController {
 		$assignment=Assignment::findOrFail($assignment_id);
 		$course=$assignment->type->course;
 		$students=$course->students;
-		
+		//$teams=array();
+		if ($assignment->team)
+		{
+			if ($assignment->teams()->count()==0)
+				return Redirect::to(action('CoursesController@getMaketeams', [$course->id, $assignment->id]));
+			$students=$assignment->teams;
+		};
 		return View::make('grades.assignment',
 			['assignment'=>$assignment,
 			'course'=>$course,
@@ -256,21 +262,38 @@ class GradesController extends \BaseController {
 	{
 		$assignment=Assignment::findOrFail($assignment_id);
 		$scorelist=array();
+		$t=$assignment->team;
+		// if it comes in from a team, all student_id's are
+		// actually team ids. Careful with scorelist, though
+		// as that probably still needs to be the teamid
+		// The student_ids used below should be for the first student 
+		// in the team
+		
+		// score will definitely be indexed by the team id
 		foreach (Input::get('score') AS $student_id => $score)
 		{
+			if ($t)
+			{
+				$sid=$student_id;
+				$student_id=Team::findOrFail($student_id)->students()->first()->id;
+				
+			} else
+			{
+				$sid=$student_id;
+			};
 			if ($score=='')
 			{
-				if (Input::get('scoreids')[$student_id] != '')
+				if (Input::get('scoreids')[$sid] != '')
 				{
-					Score::find(Input::get('scoreids')[$student_id])
+					Score::find(Input::get('scoreids')[$sid])
 						->delete();
 				};
 			} else
 			{
-				if (Input::get('scoreids')[$student_id] != '')
+				if (Input::get('scoreids')[$sid] != '')
 				{
 					// update the score
-					$scoremodel=Score::find(Input::get('scoreids')[$student_id]);
+					$scoremodel=Score::find(Input::get('scoreids')[$sid]);
 					
 				} else
 				{
@@ -283,7 +306,7 @@ class GradesController extends \BaseController {
 				$scoremodel->student_id=$student_id;
 				$scoremodel->description=Input::get('description');
 				$scoremodel->save();
-				$scorelist[$student_id]=['score'=>$score,
+				$scorelist[$sid]=['score'=>$score,
 							'id'=>$scoremodel->id];
 			};
 			

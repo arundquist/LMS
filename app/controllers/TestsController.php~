@@ -2,6 +2,12 @@
 
 class TestsController extends \BaseController {
 
+	public function __construct()
+	{
+		$this->beforeFilter('authAdmin');
+	}
+	
+	
 	/**
 	 * Display a listing of the resource.
 	 * GET /tests
@@ -203,7 +209,104 @@ class TestsController extends \BaseController {
 	public function getTestroster($course_id)
 	{
 		$course=Course::findOrFail($course_id);
-		dd($course->students);
+		foreach ($course->students AS $student)
+		{
+			echo "{$student->id}: {$student->name}";
+			if (count($student->user))
+				echo ": {$student->user->username}";
+			echo "<br/>";
+		};
+	}
+	
+	public function getTestsetinif()
+	{
+		$a=['a'=>1,'b'=>2];
+		if ($found=array_search(0, $a))
+			return $found;
+		return "didn't work";
+	}
+	
+	public function getTestnew()
+	{
+		$user = new User;
+		dd(count($user->student));
+	}
+	
+	// I need to consolidate the student duplicates
+	// they all have the same hamlineid and are connected
+	// to different classes. 
+	// I need to get each, find the student_id of the first one
+	// then, for the rest, find out what class they're associated with
+	// dissassociate them, then associate the saved one to that class
+	
+	public function getFixstudentduplicates($course_id)
+	{
+		$course=Course::findOrFail($course_id);
+		$students=$course->students;
+		foreach ($students AS $student)
+		{
+			// if user exists, then you're fine.
+			// if not, need to find other student(s) with same
+			// hamline id and attach them to this course
+			if (!$student->user)
+			{
+				$otherstudents=Student::where('hamlineid', $student->hamlineid)
+					->where('id', '!=', $student->id)->get();
+				if (count($otherstudents)==0)
+				{
+					// it's a true orphan student
+					// so it just needs a user
+					$user=new User;
+					$user->username=$student->hamlineid;
+					$user->userable_type='Student';
+					$user->userable_id=$student->id;
+					$user->save();
+				} elseif (count($otherstudents)==1)
+				{
+					// there's just one other
+					// so switch it out
+					// and delete this one
+					$otherstudent=$otherstudents->first();
+					$correctuser=$otherstudent->user;
+					foreach ($student->courses AS $othercourse)
+					{
+						$othercourse->students()->detach($student->id);
+						$othercourse->students()->attach($otherstudent->id);
+					};
+					$student->delete();
+				} else
+				{
+					// there's a few other students
+					// but I think there's only one
+					// that has a user. 
+					// so find it and do what you did above
+					$bestotherstudent='';
+					foreach ($otherstudents AS $otherstudent)
+					{
+						if ($otherstudent->user)
+						{
+							$bestotherstudent=$otherstudent;
+							break;
+						};
+					};
+					foreach ($student->courses AS $othercourse)
+					{
+						$othercourse->students()->detach($student->id);
+						$othercourse->students()->attach($bestotherstudent->id);
+					};
+					$student->delete();
+				};
+			};
+		};
+		
+	}
+	
+	public function getMailto($course_id)
+	{
+		$studentemails=Course::findOrFail($course_id)->students()->lists('email');
+		$arg="arundquist@hamline.edu?bcc=";
+		$arg.=implode(',',$studentemails);
+		echo HTML::mailto($arg,'hi there');
 	}
 
 }
