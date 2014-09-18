@@ -39,5 +39,10 @@ class Assignment extends \Eloquent {
 	{
 		return $this->hasMany('Score');
 	}
+	
+	public function extras()
+	{
+		return $this->belongsToMany('Extra');
+	}
 
 }

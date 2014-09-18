@@ -17,7 +17,7 @@ class Assignment extends \Eloquent {
 	
 	public function teams()
 	{
-		return $this->hasMany('Team');
+		return $this->belongsToMany('Team');
 	}
 	
 	public function date()
