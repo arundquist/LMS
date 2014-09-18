@@ -30,7 +30,7 @@
 	@foreach ($course->types AS $type)
 		@foreach ($type->assignments AS $assignment)
 			@if (array_key_exists($assignment->id, $alltotals[$student->id]['s']))
-				<td>{{$alltotals[$student->id]['s'][$assignment->id]}}</td>
+				<td>{{link_to_action('GradesController@getSingle', !is_null($alltotals[$student->id]['s'][$assignment->id])?$alltotals[$student->id]['s'][$assignment->id]:'--',[$assignment->id, $student->id])}}</td>
 			@else
 				<td></td>
 			@endif
