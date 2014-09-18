@@ -110,11 +110,15 @@ course algorithm: {{$course->algorithm->algorithm}}
 	resources
 @endif
 </h1>
+<ul class="list-group">
 @foreach ($assignment->extras AS $extra)
-{{Markdown::render($extra->content)}}
+	<li class="list-group-item">{{Markdown::render($extra->content)}}
 @if ($role=='Faculty')
 	{{link_to_route('extras.edit','edit', $extra->id)}}
 @endif
+
+	</li>
 @endforeach
+</ul>
 
 @stop

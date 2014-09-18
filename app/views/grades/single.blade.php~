@@ -102,5 +102,19 @@
 Total score = {{$totals['totals'][-1]}}<br/>
 course algorithm: {{$course->algorithm->algorithm}}
 </div> 
+<div>
+<h1>
+@if ($role=='Faculty')
+	{{link_to_route('extras.create','Resources')}}
+@else
+	resources
+@endif
+</h1>
+@foreach ($assignment->extras AS $extra)
+{{Markdown::render($extra->content)}}
+@if ($role=='Faculty')
+	{{link_to_route('extras.edit','edit', $extra->id)}}
+@endif
+@endforeach
 
 @stop
