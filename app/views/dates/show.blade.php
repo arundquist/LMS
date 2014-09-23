@@ -9,6 +9,15 @@ assigned today:
 <ul>
 @foreach ($date->assignments AS $assignment)
 	<li>{{$assignment->type->type}}-{{$assignment->comments}}: {{$assignment->details}}</li>
+	<li>
+		<ul class='list-group'>
+			@foreach ($assignment->extras AS $extra)
+				<li class='list-group-item'>
+					{{Markdown::render($extra->content)}}
+				</li>
+			@endforeach
+		</ul>
+	</li>
 @endforeach
 </ul>
 <hr/>
