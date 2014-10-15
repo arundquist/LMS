@@ -13,7 +13,7 @@ assigned today:
 		<ul class='list-group'>
 			@foreach ($assignment->extras AS $extra)
 				<li class='list-group-item'>
-					{{Markdown::render($extra->content)}}
+					{{Markdown::Render($extra->content)}}
 				</li>
 			@endforeach
 		</ul>

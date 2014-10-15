@@ -309,6 +309,18 @@ class TestsController extends \BaseController {
 		echo HTML::mailto($arg,'hi there');
 	}
 	
+	public function getStandardslist($type_id)
+	{
+		$type=Type::findOrFail($type_id);
+		echo "<ol>";
+		foreach ($type->assignments AS $assignment)
+		{
+			echo "<li>{$assignment->comments}: {$assignment->details}</li>";
+		};
+		echo "</ol>";
+	}
+				
+	
 	
 
 }

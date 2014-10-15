@@ -308,5 +308,7 @@ class TestsController extends \BaseController {
 		$arg.=implode(',',$studentemails);
 		echo HTML::mailto($arg,'hi there');
 	}
+	
+	
 
 }
