@@ -319,6 +319,17 @@ class TestsController extends \BaseController {
 		};
 		echo "</ol>";
 	}
+	
+	public function getStandardslistrandom($type_id)
+	{
+		$type=Type::findOrFail($type_id);
+		echo "<ol>";
+		foreach ($type->assignments->orderBy(DB::raw('RAND()'))->get() AS $assignment)
+		{
+			echo "<li>{$assignment->comments}: {$assignment->details}</li>";
+		};
+		echo "</ol>";
+	}
 				
 	
 	
