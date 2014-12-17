@@ -496,14 +496,16 @@ class GradesController extends \BaseController {
 				->orderBy('updated_at', 'DESC')
 				->first();
 			
+			
 			$scoredate=$score->updated_at;
 			if ($scoredate->diffInSeconds($cdate,false)<0)
 				continue; // score is more recent than link
 			// here check most recent comments from me
 			$scomments=$score->comments()
-				->where('user_id', Auth::user()->userable_id)
+				->where('user_id', Auth::user()->id)
 				->orderBy('updated_at', 'DESC')
 				->first();
+			//dd($scomments);
 			if (count($scomments))
 			{
 				if ($scomments->updated_at->diffInSeconds($cdate,false)<0)
@@ -511,7 +513,7 @@ class GradesController extends \BaseController {
 			};
 			// now do any links
 			$scomments=$score->links()
-				->where('user_id', Auth::user()->userable_id)
+				->where('user_id', Auth::user()->id)
 				->orderBy('updated_at', 'DESC')
 				->first();
 			if (count($scomments))
