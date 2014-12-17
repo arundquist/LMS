@@ -452,5 +452,80 @@ class GradesController extends \BaseController {
 			['comments'=>$comments,
 			'model'=>'links']);
 	}
+	
+	public function getRecentlinksactive($course_id)
+	{
+		if (!(Auth::user()->userable_type=='Faculty'))
+			return "sorry, you're not faculty";
+		$fac=Faculty::findOrFail(Auth::user()->userable_id);
+		//$courses=$fac->courses;
+		$courses=Course::where('id',$course_id)->get();
+		//$courseids=[$course_id];
+		$courseids=$courses->lists('id');
+		$scoreids=array();
+		foreach ($courses AS $course)
+		{
+			$assignmentids=$course->assignments->lists('id');
+			if(count($assignmentids)>0)
+			{
+				$thesescoreids=Score::whereIn('assignment_id', $assignmentids)
+					->lists('id');
+				$scoreids=array_merge($scoreids, $thesescoreids);
+			};
+		};
+		$comments=Link::with('score','score.student')
+			->whereIn('score_id', $scoreids)
+			->where('user_id', '!=', Auth::user()->id)
+			->orderBy('created_at', 'ASC')
+			->get();
+			
+		// here I'm going to go through each and see if the score or any 
+		// other comments or files are more recent
+		$activecomments=array();
+		
+		foreach ($comments AS $comment)
+		{
+			$cdate=$comment->updated_at;
+			$student=$comment->user;
+			$thisscore=$comment->score;
+			
+			// crap. I need to grab the most recent score
+			
+			$score=Score::where('student_id', $student->userable_id)
+				->where('assignment_id',$thisscore->assignment_id)
+				->orderBy('updated_at', 'DESC')
+				->first();
+			
+			$scoredate=$score->updated_at;
+			if ($scoredate->diffInSeconds($cdate,false)<0)
+				continue; // score is more recent than link
+			// here check most recent comments from me
+			$scomments=$score->comments()
+				->where('user_id', Auth::user()->userable_id)
+				->orderBy('updated_at', 'DESC')
+				->first();
+			if (count($scomments))
+			{
+				if ($scomments->updated_at->diffInSeconds($cdate,false)<0)
+					continue;
+			};
+			// now do any links
+			$scomments=$score->links()
+				->where('user_id', Auth::user()->userable_id)
+				->orderBy('updated_at', 'DESC')
+				->first();
+			if (count($scomments))
+			{
+				if ($scomments->updated_at->diffInSeconds($cdate,false)<0)
+					continue;
+			};
+			$activecomments[]=$comment;
+		}; // end for loop looking for more recent scores or whatever
+			
+		//dd($activecomments);
+		return View::make('grades.recentcommentsactive',
+			['comments'=>$activecomments,
+			'model'=>'links']);
+	}
 
 }

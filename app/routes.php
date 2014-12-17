@@ -17,6 +17,7 @@ Route::get('/', function()
 	return View::make('public.welcome', compact('faculties'));
 });
 
+
 Route::get('markdown', function()
 	{
 		return Markdown::render('hi there');

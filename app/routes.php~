@@ -27,6 +27,7 @@ Route::controller('user', 'UsersController');
 Route::controller('tests', 'TestsController');
 Route::controller('public', 'PublicController');
 Route::resource('syllabus', 'SyllabusController');
+Route::resource('extras', 'ExtrasController');
 
 Route::resource('algorithms', 'AlgorithmsController');
 Route::resource('assignments', 'AssignmentsController');

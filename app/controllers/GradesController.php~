@@ -392,5 +392,65 @@ class GradesController extends \BaseController {
 	{
 		//
 	}
+	
+	public function getRecentcomments()
+	{
+		if (!(Auth::user()->userable_type=='Faculty'))
+			return "sorry, you're not faculty";
+		$fac=Faculty::findOrFail(Auth::user()->userable_id);
+		$courses=$fac->courses;
+		$courseids=$courses->lists('id');
+		$scoreids=array();
+		foreach ($courses AS $course)
+		{
+			$assignmentids=$course->assignments->lists('id');
+			if(count($assignmentids)>0)
+			{
+				$thesescoreids=Score::whereIn('assignment_id', $assignmentids)
+					->lists('id');
+				$scoreids=array_merge($scoreids, $thesescoreids);
+			};
+		};
+		$comments=Comment::with('score','score.student')
+			->whereIn('score_id', $scoreids)
+			->where('user_id', '!=', Auth::user()->id)
+			->orderBy('created_at', 'DESC')
+			->simplePaginate(15);
+			
+		
+		return View::make('grades.recentcomments',
+			['comments'=>$comments,
+			'model'=>'comments']);
+	}
+	
+	public function getRecentlinks()
+	{
+		if (!(Auth::user()->userable_type=='Faculty'))
+			return "sorry, you're not faculty";
+		$fac=Faculty::findOrFail(Auth::user()->userable_id);
+		$courses=$fac->courses;
+		$courseids=$courses->lists('id');
+		$scoreids=array();
+		foreach ($courses AS $course)
+		{
+			$assignmentids=$course->assignments->lists('id');
+			if(count($assignmentids)>0)
+			{
+				$thesescoreids=Score::whereIn('assignment_id', $assignmentids)
+					->lists('id');
+				$scoreids=array_merge($scoreids, $thesescoreids);
+			};
+		};
+		$comments=Link::with('score','score.student')
+			->whereIn('score_id', $scoreids)
+			->where('user_id', '!=', Auth::user()->id)
+			->orderBy('created_at', 'DESC')
+			->simplePaginate(15);
+			
+		
+		return View::make('grades.recentcomments',
+			['comments'=>$comments,
+			'model'=>'links']);
+	}
 
 }
