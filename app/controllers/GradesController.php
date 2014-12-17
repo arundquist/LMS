@@ -460,6 +460,7 @@ class GradesController extends \BaseController {
 		$fac=Faculty::findOrFail(Auth::user()->userable_id);
 		//$courses=$fac->courses;
 		$courses=Course::where('id',$course_id)->get();
+		$course=$courses->first();
 		//$courseids=[$course_id];
 		$courseids=$courses->lists('id');
 		$scoreids=array();
@@ -527,7 +528,8 @@ class GradesController extends \BaseController {
 		//dd($activecomments);
 		return View::make('grades.recentcommentsactive',
 			['comments'=>$activecomments,
-			'model'=>'links']);
+			'model'=>'links',
+			'course'=>$course]);
 	}
 
 }

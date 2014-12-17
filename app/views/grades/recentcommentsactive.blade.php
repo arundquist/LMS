@@ -1,7 +1,8 @@
 @extends('layouts.master')
 @section('main')
 
-<h1>Recent {{$model}}</h1>
+<h1>Recent {{$model}} for {{$course->short}}</h1>
+<h2>Total = {{count($comments)}}</h2>
 <div class="row">
 <ul class="list-group">
 	@foreach ($comments AS $comment)
