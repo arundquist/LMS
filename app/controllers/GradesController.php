@@ -496,6 +496,13 @@ class GradesController extends \BaseController {
 				->where('assignment_id',$thisscore->assignment_id)
 				->orderBy('updated_at', 'DESC')
 				->first();
+				
+			// if the score doesn't exist, it's because it's pending right now
+			if (count($score)==0)
+			{
+				$activecomments[]=$comment;
+				continue;
+			};
 			
 			
 			$scoredate=$score->updated_at;
