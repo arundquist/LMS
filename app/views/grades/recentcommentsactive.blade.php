@@ -15,6 +15,7 @@
 			@else
 				{{link_to($comment->link, $comment->description)}}
 			@endif
+			
 		</li>
 	@endforeach
 </ul>
