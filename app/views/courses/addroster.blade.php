@@ -1,16 +1,21 @@
 @extends('layouts.master')
 @section('main')
+
 <h1>Roster for {{$course->short}})</h1>
+
 {{Form::open(['method'=>'post', 'action'=>['CoursesController@postAddroster', $course->id]])}}
+
 <div class="col-md-3">
 <p>Current Students</p>
 <ul class="list-group">
+
 @foreach ($students AS $student)
 	<li class="list-group-item">{{Form::checkbox('delete[]', $student->id)}} {{$student->name}} 
 					{{HTML::mailto($student->email)}} {{$student->user->username}}
 					{{link_to_action('CoursesController@getResetstudentpassword',
 					'reset password', [$course->id, $student->user->id])}}</li>
 @endforeach
+
 </ul>
 </div>
 

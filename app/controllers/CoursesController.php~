@@ -211,7 +211,7 @@ class CoursesController extends \BaseController {
 		// now get the roster
 		if (Input::get('roster')!='')
 		{
-			preg_match_all("/<A[^>]*Student Information[^>]*>([^<]*).*?fieldmediumtext\">([0-9]+).*?do_mail\('([^']*)','([a-zA-Z0-9]+)/s",Input::get('roster'), $matches);
+			preg_match_all("/<a[^>]*Student Information[^>]*>([^<]*).*?fieldmediumtext\">([0-9]+).*?do_mail\('([^']*)','([a-zA-Z0-9]+)/s",Input::get('roster'), $matches);
 			foreach ($matches[1] AS $key=>$match)
 			{
 				$newstudents[]=['name'=>$match,

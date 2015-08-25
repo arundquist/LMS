@@ -253,10 +253,10 @@ class CoursesController extends \BaseController {
 					$stu = New Student;
 				}; */
 				
-				if (count($user->student))
+				if (count($user->userable))
 				{
 					//it found the student
-					$stu=$user->student;
+					$stu=$user->userable;
 				} else
 				{
 					$stu = New student;
