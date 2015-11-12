@@ -31,6 +31,7 @@ Due today:
 			@foreach ($da->extras AS $extra)
 				<li class='list-group-item'>
 					{{Markdown::Render($extra->content)}}
+					{{link_to_route('extras.edit','edit', $extra->id)}}
 				</li>
 			@endforeach
 		</ul>
