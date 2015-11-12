@@ -25,6 +25,15 @@ Due today:
 <ul>
 @foreach ($dueassignments AS $da)
 	<li>{{$da->type->type}}-{{$da->comments}}: {{$da->details}}</li>
+	<li>
+		<ul class='list-group'>
+			@foreach ($da->extras AS $extra)
+				<li class='list-group-item'>
+					{{Markdown::Render($extra->content)}}
+				</li>
+			@endforeach
+		</ul>
+	</li>
 @endforeach
 
 </ul>
