@@ -7,7 +7,7 @@
 <ul class="list-group">
 	@foreach ($comments AS $comment)
 		<li class="list-group-item">
-			{{$comment->created_at->diffForHumans()}}
+			{{$comment->created_at->diffForHumans()}}({{$comment->created_at}})
 			{{link_to_action('GradesController@getSingle', $comment->score->student->name,
 				[$comment->score->student->id, $comment->score->assignment_id])}}
 			@if ($model=='comments')
