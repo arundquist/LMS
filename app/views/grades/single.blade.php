@@ -3,7 +3,7 @@
 
 <h1>{{$student->name}}</h1>
 <h2>{{$assignment->type->type}}: {{$assignment->comments}}</h2>
-<p>{{$assignment->details}}</p>
+<p>{{Markdown::Render($assignment->details)}}</p>
 @if (count($teammates))
 	<p>Teammates: 
 	@foreach ($teammates AS $teammate)

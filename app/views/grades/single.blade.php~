@@ -43,6 +43,7 @@
           {{ Form::radio('attach','old',true,array('id'=>'old')) }}
           {{ Form::label('new','attach to new score') }}
           {{ Form::radio('attach','new','',array('id'=>'new')) }}
+          Note that if you're submitting something new to be graded, choose "attach to new score"
 	{{Form::submit('submit')}}
 	{{Form::close()}}
 	
