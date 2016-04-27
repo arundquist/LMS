@@ -63,13 +63,13 @@
 		@foreach ($allactivities[$score->id] AS $activity)
 			@if ($activity['type']=='Comment')
 				<tr>
-					<td>{{$activity['date']->diffForHumans()}} ({{$activity['date']}}</td>
+					<td>{{$activity['date']->diffForHumans()}} ({{$activity['date']}})</td>
 					<td>{{$activity['data']->user->userable->name}}</td>
 					<td>{{Markdown::render($activity['data']->comment)}}</td>
 				</tr>
 			@elseif ($activity['type']=='Link')
 				<tr>
-					<td>{{$activity['date']->diffForHumans()}} ({{$activity['date']}}</td>
+					<td>{{$activity['date']->diffForHumans()}} ({{$activity['date']}})</td>
 					<td>{{$activity['data']->user->userable->name}}</td>
 					@if ($activity['data']->description == '')
 						<td>{{Markdown::render($activity['data']->link)}}</td>
