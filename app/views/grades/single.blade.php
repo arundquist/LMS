@@ -63,7 +63,7 @@
 		@foreach ($allactivities[$score->id] AS $activity)
 			@if ($activity['type']=='Comment')
 				<tr>
-					<td>{{$activity['date']->diffForHumans()}}</td>
+					<td>{{$activity['date']->diffForHumans()}} ({{$activity['date']}}</td>
 					<td>{{$activity['data']->user->userable->name}}</td>
 					<td>{{Markdown::render($activity['data']->comment)}}</td>
 				</tr>
