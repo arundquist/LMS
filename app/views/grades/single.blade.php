@@ -69,7 +69,7 @@
 				</tr>
 			@elseif ($activity['type']=='Link')
 				<tr>
-					<td>{{$activity['date']->diffForHumans()}}</td>
+					<td>{{$activity['date']->diffForHumans()}} ({{$activity['date']}}</td>
 					<td>{{$activity['data']->user->userable->name}}</td>
 					@if ($activity['data']->description == '')
 						<td>{{Markdown::render($activity['data']->link)}}</td>
