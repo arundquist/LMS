@@ -453,6 +453,24 @@ class GradesController extends \BaseController {
 			'model'=>'links']);
 	}
 	
+	public function getGradelater($course_id)
+	{
+		if (!(Auth::user()->userable_type=='Faculty'))
+			return "sorry, you're not faculty";
+		$fac=Faculty::findOrFail(Auth::user()->userable_id);
+		$courses=Course::where('id',$course_id)->get();
+		$course=$courses->first();
+		$assignmentids=$course->assignments->lists('id');
+		$scores=Score::with('student','assignment')->whereIn('assignment_id', $assignmentids)
+			->where('score', 'grade later')
+			->orderBy('created_at', 'ASC')
+			->get();
+		//dd($scores);
+		return View::make('grades.gradelater',
+			['course'=>$course,
+			'scores'=>$scores]);
+	}
+	
 	public function getRecentlinksactive($course_id)
 	{
 		if (!(Auth::user()->userable_type=='Faculty'))
