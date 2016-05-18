@@ -471,6 +471,27 @@ class GradesController extends \BaseController {
 			'scores'=>$scores]);
 	}
 	
+	public function getGradedtoday()
+	{
+		if (!(Auth::user()->userable_type=='Faculty'))
+			return "sorry, you're not faculty";
+		$fac=Faculty::with('courses','courses.assignments')
+			->findOrFail(Auth::user()->userable_id);
+		$courses=$fac->courses;
+		//dd($courses);
+		$allassids=[];
+		foreach ($courses AS $course)
+		{
+			$assignmentids=$course->assignments->lists('id');
+			$allassids=array_merge($allassids, $assignmentids);
+		};
+		//dd($allassids);
+		$count=Score::whereIn('assignment_id', $allassids)
+			->whereRaw('updated_at >= curdate()')
+			->count();
+		echo "you've graded $count assignments today";
+	}
+	
 	public function getRecentlinksactive($course_id)
 	{
 		if (!(Auth::user()->userable_type=='Faculty'))

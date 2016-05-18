@@ -577,5 +577,25 @@ class GradesController extends \BaseController {
 			'model'=>'links',
 			'course'=>$course]);
 	}
+	
+	public function getStudentchart($student_id,$course_id)
+	{
+		if (!(Auth::user()->userable_type=='Faculty'))
+			return "sorry, you're not faculty";
+		$fac=Faculty::findOrFail(Auth::user()->userable_id);
+		$student=Student::findOrFail($student_id);
+		$course=Course::findOrFail($course_id);
+		$assignmentids=$course->assignments->lists('id');
+		$scores=Score::whereIn('assignment_id',$assignmentids)
+			->where('student_id',$student_id)
+			->get();
+		$orgscores=array();
+		foreach ($scores as $score) {
+			if (is_numeric($score->score))
+				$orgscores[$score->assignment_id][]=[$score->score,$score->updated_at];
+		}
+		dd($orgscores);
+	}
+	
 
 }
