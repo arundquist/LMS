@@ -606,7 +606,8 @@ class GradesController extends \BaseController {
 				{
 					$string.=", undefined, undefined,";
 				};
-				$string .= " $score->score, '{$assignmentnames[$score->assignment_id]}', 'hi there'";
+				$as=addslashes($assignmentnames[$score->assignment_id]);
+				$string .= " $score->score, '$as', 'hi there'";
 				for($i=$num[$score->assignment_id]; $i<max($num); $i++)
 				{
 					$string.=",, undefined, undefined";

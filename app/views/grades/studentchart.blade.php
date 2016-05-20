@@ -8,7 +8,7 @@
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'Date');
         @foreach ($assignments AS $id=>$name)
-          data.addColumn('number', '{{$name}}');
+          data.addColumn('number', '{{addslashes($name)}}');
           data.addColumn('string', 'title');
           data.addColumn('string', 'text');
         @endforeach
