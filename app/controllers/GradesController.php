@@ -599,8 +599,8 @@ class GradesController extends \BaseController {
 			{
 				$justdate=substr($score->date, 0,-1);
 				$orgscores[$score->assignment_id][]=[$score->score,$score->updated_at];
-				dd($score);
-				$string="[new Date('$score->date'), ";
+				//dd($score);
+				$string="[new Date('$score->updated_at'), ";
 				
 				for($i=0; $i<$num[$score->assignment_id]; $i++)
 				{
