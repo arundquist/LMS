@@ -21,7 +21,9 @@
         var chart = new google.visualization.AnnotationChart(document.getElementById('chart_div'));
 
         var options = {
-          displayAnnotations: true
+          displayAnnotations: true,
+          min: 0,
+          max: 4.5
         };
 
         chart.draw(data, options);
