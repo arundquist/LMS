@@ -586,15 +586,38 @@ class GradesController extends \BaseController {
 		$student=Student::findOrFail($student_id);
 		$course=Course::findOrFail($course_id);
 		$assignmentids=$course->assignments->lists('id');
+		$num=array_flip($assignmentids);
+		//dd($num);
+		$assignmentnames=$course->assignments->lists('comments','id');
 		$scores=Score::whereIn('assignment_id',$assignmentids)
 			->where('student_id',$student_id)
 			->get();
 		$orgscores=array();
+		$strings=[];
 		foreach ($scores as $score) {
 			if (is_numeric($score->score))
+			{
+				$justdate=substr($score->date, 0,-1);
 				$orgscores[$score->assignment_id][]=[$score->score,$score->updated_at];
+				$string="[new Date('$score->date'), ";
+				
+				for($i=0; $i<$num[$score->assignment_id]; $i++)
+				{
+					$string.=", undefined, undefined,";
+				};
+				$string .= " $score->score, '{$assignmentnames[$score->assignment_id]}', 'hi there'";
+				for($i=$num[$score->assignment_id]; $i<max($num); $i++)
+				{
+					$string.=",, undefined, undefined";
+				};
+				$string .= "],";
+				$strings[]=$string;
+			}
 		}
-		dd($orgscores);
+		return View::make('grades.studentchart',
+			['assignments'=>$assignmentnames,
+			'orgscores'=>$orgscores,
+			'strings'=>$strings]);
 	}
 	
 
