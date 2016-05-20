@@ -595,7 +595,7 @@ class GradesController extends \BaseController {
 		$orgscores=array();
 		$strings=[];
 		foreach ($scores as $score) {
-			if (is_numeric($score->score))
+			if (is_numeric($score->score) && $score->score<5)
 			{
 				$justdate=substr($score->date, 0,-1);
 				$orgscores[$score->assignment_id][]=[$score->score,$score->updated_at];
