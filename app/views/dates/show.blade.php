@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('main')     
+@section('main')
 
 <h1>{{link_to_route('syllabus.show',"{$date->course->classname} ({$date->course->semester} {$date->course->year})", [$date->course_id])}}</h1>
 <h2>Daily outline for {{$date->date->toDayDateTimeString()}} ({{$date->date->diffForHumans()}})</h2>
@@ -25,7 +25,7 @@ assigned today:
 Due today:
 <ul>
 @foreach ($dueassignments AS $da)
-	<li>{{$da->type->type}}-{{$da->comments}}: {{$da->details}}</li>
+	<li>{{$da->type->type}}-{{$da->comments}}: {{Markdown::Render($da->details)}}</li>
 	<li>
 		<ul class='list-group'>
 			@foreach ($da->extras AS $extra)
