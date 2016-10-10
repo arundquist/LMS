@@ -6,7 +6,7 @@
 <p>{{Markdown::Render($assignment->details)}}</p>
 <p>Due date: {{$assignment->duedate}}</p>
 @if (count($teammates))
-	<p>Teammates: 
+	<p>Teammates:
 	@foreach ($teammates AS $teammate)
 		{{HTML::mailto($teammate->email,$teammate->name)}}
 	@endforeach
@@ -23,8 +23,8 @@
 @if ($role=='Faculty')
 	<div>
 		<div>
-		
-		{{Form::text('score',Input::old('score'), array('placeholder'=>'score'))}} 
+
+		{{Form::text('score',Input::old('score'), array('placeholder'=>'score'))}}
 		{{Form::text('scoredescription',Input::old('scoredescription'), array('placeholder'=>'score description'))}}
 		</div>
 	</div>
@@ -40,14 +40,18 @@
 		{{Form::textarea('description', '', array('placeholder'=>'link description (optional)'))}}
 		</td>
 	</table>
+	@if ($role=='Faculty')
 	 {{ Form::label('old','attach to old score') }}
           {{ Form::radio('attach','old',true,array('id'=>'old')) }}
           {{ Form::label('new','attach to new score') }}
           {{ Form::radio('attach','new','',array('id'=>'new')) }}
           Note that if you're submitting something new to be graded, choose "attach to new score"
+	@else
+		{{Form::hidden('attach','new')}}
+	@endif
 	{{Form::submit('submit')}}
 	{{Form::close()}}
-	
+
 </div>
 
 
@@ -103,7 +107,7 @@
 </table>
 Total score = {{$totals['totals'][-1]}}<br/>
 course algorithm: {{$course->algorithm->algorithm}}
-</div> 
+</div>
 <div>
 <h1>
 @if ($role=='Faculty')
