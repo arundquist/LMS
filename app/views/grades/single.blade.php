@@ -58,7 +58,7 @@
 
 <table class="table table-striped table-bordered">
 @foreach ($scores AS $score)
-	<tr><td colspan='3'>Score submitted {{$score->updated_at->diffForHumans()}}
+	<tr><td colspan='3'>Score submitted {{$score->updated_at->diffForHumans()}} ({{$score->updated_at}})
 	@if($score->score != 'pending')
 		by {{$score->user->userable->name}}
 	@endif
