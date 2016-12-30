@@ -16,7 +16,7 @@
 <ul class="list-group">
 @foreach($course->dates AS $date)
 	<li class="list-group-item">
-		{{$date->date}}:{{Form::text("topics[$date->id]", $date->maintopic)}}
+		{{$date->date->format('D M j')}}:{{Form::text("topics[$date->id]", $date->maintopic)}}
 	</li>
 @endforeach
 </ul>
