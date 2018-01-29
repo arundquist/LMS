@@ -15,8 +15,8 @@
 			<ul class="list-group">
 				@foreach ($course->assignments AS $assignment)
 					<li class = "list-group-item">
-						{{Form::checkbox('asses[]', $assignment->id)}}	
-					{{$assignment->comments}}
+						{{Form::checkbox('asses[]', $assignment->id)}}
+					{{$assignment->type->type}}-{{$assignment->comments}}
 					</li>
 				@endforeach
 			</ul>
