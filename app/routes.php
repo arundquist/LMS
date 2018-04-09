@@ -10,7 +10,7 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
-
+\URL::forceSchema('https');
 Route::get('/', function()
 {
 	$faculties=Faculty::all();
