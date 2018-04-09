@@ -9,7 +9,7 @@
 
     {{-- Form::open(['method'=>'post', 'action'=>'UsersController@postLogin']) --}}
     <form action="https://physics.hamline.edu/~arundquist/LMS/user/login" method='post'>
-
+      {{ csrf_field() }}
     <!-- username field -->
     <p>
         {{ Form::label('username', 'Username') }}<br/>
