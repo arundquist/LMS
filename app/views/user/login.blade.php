@@ -7,9 +7,9 @@
         <div id="flash_error">{{ Session::get('flash_error') }}</div>
     @endif
 
-    {{-- Form::open(['method'=>'post', 'action'=>'UsersController@postLogin']) --}}
-    <form action="https://physics.hamline.edu/~arundquist/LMS/user/login" method='post'>
-      {{ csrf_field() }}
+    {{ Form::open(['method'=>'post', 'action'=>'UsersController@postLogin']) }}
+    {{-- <form action="https://physics.hamline.edu/~arundquist/LMS/user/login" method='post'> --}}
+
     <!-- username field -->
     <p>
         {{ Form::label('username', 'Username') }}<br/>
