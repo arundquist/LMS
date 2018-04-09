@@ -7,7 +7,8 @@
         <div id="flash_error">{{ Session::get('flash_error') }}</div>
     @endif
 
-    {{ Form::open(['method'=>'post', 'action'=>'UsersController@postLogin']) }}
+    {{-- Form::open(['method'=>'post', 'action'=>'UsersController@postLogin']) --}}
+    <form action="{{action('UsersController@postLogin')}}" method='post'>
 
     <!-- username field -->
     <p>
