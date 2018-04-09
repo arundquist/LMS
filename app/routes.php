@@ -23,6 +23,14 @@ Route::get('markdown', function()
 		return Markdown::render('hi there');
 	});
 
+Route::get('fix', function()
+	{
+		$user=User::findOrFail(604);
+	//	$user->password=Hash::make("test");
+	//	$user->save();
+		dd(Hash::make("sdfdsf"));
+	});
+
 Route::controller('grades', 'GradesController');
 Route::controller('user', 'UsersController');
 Route::controller('tests', 'TestsController');
@@ -66,7 +74,7 @@ Route::get('testdd', function()
 Route::get('liststudents', function()
 	{
 		$students=Student::groupBy('name')
-			->get(array( 
+			->get(array(
 				DB::Raw('id, name, hamlineid, group_concat(courseid) as courselist')));
 		foreach ($students AS $student)
 		{
@@ -91,7 +99,7 @@ Route::get('showdups', function()
 	{
 		$students=User::groupBy('username')
 			->having('num','>','1')
-			->get(array( 
+			->get(array(
 				DB::Raw('id, username, userable_type, userable_id, count(id) as num, group_concat(userable_id) AS sid')));
 		/* foreach ($students AS $student)
 		{
@@ -104,7 +112,7 @@ Route::get('showdups', function()
 			DB::table('scores')
 				->whereIn('student_id', $duparray)
 				->update(['student_id'=>$first]);
-			
+
 		}; */
 	});
 
@@ -126,7 +134,7 @@ Route::get('fixscores', function()
 				Score::whereIn('old_student_id', $ids)
 					->update(['student_id'=>$user->userable_id]);
 			};
-			
+
 		};
 		*/
 	});
@@ -152,7 +160,7 @@ Route::get('getfaculty', function()
 		/*$faculties=Faculty::all();
 		foreach ($faculties AS $faculty)
 		{
-			
+
 
 			$user = new User;
 			$user->username=$faculty->hamlineid;
@@ -160,7 +168,7 @@ Route::get('getfaculty', function()
 			$user->userable_id=$faculty->id;
 			$user->userable_type="Faculty";
 			$user->save();
-			
+
 		};*/
 	});
 
@@ -260,4 +268,3 @@ Route::get('testuser/{id}', function($id)
 			echo "{$course->classname}<br/>";
 		};
 	});
-

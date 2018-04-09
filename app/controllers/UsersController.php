@@ -6,55 +6,56 @@ class UsersController extends \BaseController {
 	    {
 		$this->beforeFilter('auth', array('except' =>['postLogin', 'getLogin', 'getChangepassword',
 			'postChangepassword']));
-		
-	
-		
+
+
+
 	    }
-	
+
 	/**
 	 * Display a listing of the resource.
 	 * GET /users
 	 *
 	 * @return Response
 	 */
-	
+
 	 public function getTest()
 	 {
 	 	 return "hi there";
 	 }
-	 
+
 	 public function getLogin()
 	 {
 	 	 return View::make('user.login');
 	 }
-	 
+
 	 public function postLogin()
 	 {
 	 	 if (Auth::attempt(['username'=>Input::get('username'), 'password'=>Input::get('password')]))
 	 	 {
-	 	 	 return Redirect::intended(action('UsersController@getDashboard'));
+			 dd("made it here");
+			 return Redirect::intended(action('UsersController@getDashboard'));
 	 	 };
-	 	 
+
 	 }
-	 
+
 	 public function getLogout()
 	 {
 	 	 Auth::logout();
 	 	 return Redirect::to(action('UsersController@getLogin'));
 	 }
-	 
+
 	 public function getDashboard()
 	 {
 	 	 $user=Auth::user();
 	 	 return View::make('user.dashboard', compact('user'));
 	 }
-	 
+
 	 public function getChangepassword()
 	 {
 	 	 $user=Auth::user();
 	 	 return View::make('user.changepassword', compact('user'));
 	 }
-	 
+
 	 public function postChangepassword()
 	 {
 	 	 if (Auth::guest())
@@ -71,7 +72,7 @@ class UsersController extends \BaseController {
 	 	 	 return Redirect::back();
 	 	 };
 	 }
-	 
+
 	 public function getResetpassword()
 	 {
 	 	 $user=Auth::user();
@@ -79,5 +80,5 @@ class UsersController extends \BaseController {
 	 	 $user->save();
 	 	 return Redirect::to(action('UsersController@getDashboard'));
 	 }
-	 	 
+
 }
