@@ -8,7 +8,7 @@
     @endif
 
     {{-- Form::open(['method'=>'post', 'action'=>'UsersController@postLogin']) --}}
-    <form action="{{action('UsersController@postLogin')}}" method='post'>
+    <form action="https://physics.hamline.edu/~arundquist/LMS/user/login" method='post'>
 
     <!-- username field -->
     <p>
