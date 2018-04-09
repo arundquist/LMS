@@ -30,7 +30,8 @@ class UsersController extends \BaseController {
 
 	 public function postLogin()
 	 {
-	 	 if (Auth::attempt(['username'=>Input::get('username'), 'password'=>Input::get('password')]))
+		 dd("made it here just inside postLogin");
+		 if (Auth::attempt(['username'=>Input::get('username'), 'password'=>Input::get('password')]))
 	 	 {
 			 dd("made it here");
 			 return Redirect::intended(action('UsersController@getDashboard'));
