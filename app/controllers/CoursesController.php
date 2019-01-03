@@ -6,9 +6,9 @@ class CoursesController extends \BaseController {
 	{
 		$this->beforeFilter('authFaculty', ['except'=>'getCalendar']);
 	}
-	
-	
-	
+
+
+
 	public function getDoesthiswork()
 	{
 		return "yep it does";
@@ -47,9 +47,9 @@ class CoursesController extends \BaseController {
 		$course->save();
 
 		return Redirect::route('syllabus.show',[$course->id]);
-		
+
 		//return Input::get('roster');
-		
+
 	}
 
 	public function getAdddates($course_id)
@@ -60,13 +60,13 @@ class CoursesController extends \BaseController {
 		{
 			return Redirect::to(action('UsersController@getLogin'));
 		};
-		
+
 		$currentdates=$course->dates;
 		return View::make('courses.adddates',
 			['course'=>$course,
 			'currentdates'=>$currentdates]);
 	}
-	
+
 	public function postAdddates($course_id)
 	{
 		$course=Course::findOrFail($course_id);
@@ -88,12 +88,12 @@ class CoursesController extends \BaseController {
 			$date->course_id=$course_id;
 			$date->save();
 		};
-		
+
 		// get all dates for course (rounds to date)
-		
+
 		$curdates=$course->dates()->select(DB::raw('date(date) as date'))->lists('date');
-		
-		if ((Input::get('startdate')!='') && (Input::get('enddate')!='') 
+
+		if ((Input::get('startdate')!='') && (Input::get('enddate')!='')
 			&& isset($days))
 		{
 			$start=Carbon::createFromFormat('Y-m-d H:i:s', Input::get('startdate')." $coursetime");
@@ -114,8 +114,8 @@ class CoursesController extends \BaseController {
 					$date->save();
 					$curdates[]=$start->toDateString();
 				};
-				
-				
+
+
 			};
 			foreach ($days AS $day)
 			{
@@ -131,7 +131,7 @@ class CoursesController extends \BaseController {
 				// will keep changing $beg throughout the loop
 				while ($beg->diffInDays($end->startOfDay(),false) >= 0)
 				{
-					
+
 					if (!in_array($beg->toDateString(), $curdates))
 					{
 						$date=new Date;
@@ -139,7 +139,7 @@ class CoursesController extends \BaseController {
 						$date->course_id=$course_id;
 						$date->save();
 						$curdates[]=$beg->toDateString();
-						
+
 					};
 					$beg->addWeek();
 				};
@@ -147,7 +147,7 @@ class CoursesController extends \BaseController {
 		};
 		return Redirect::action('CoursesController@getAdddates', [$course_id]);
 	}
-	
+
 
 	public function getAddroster($course_id)
 	{
@@ -167,13 +167,13 @@ class CoursesController extends \BaseController {
 	{
 		$course=Course::findOrFail($course_id);
 		//$studenthamlineidlist=$course->students()->lists('hamlineid','students.id');
-		
+
 		$deleteids=Input::get('delete');
 		if (isset($deleteids))
 		{
 			// to delete, you need to go through all the
 			// relationships
-			
+
 			// no, I've used the boot() function in both
 			// students and scores to delete the daughters
 			// ie the comments and the links
@@ -193,12 +193,12 @@ class CoursesController extends \BaseController {
 		{
 			$studenthamlineidlist[$studentincourse->id]=$studentincourse->hamlineid;
 		};
-		
+
 		// next add the individual student only if it doesn't exist
 		// if it does exist, go ahead and change the info I guess
-		
+
 		// actually maybe make an array of name, username, email
-		// and do a big foreach. The individual one just gets 
+		// and do a big foreach. The individual one just gets
 		// added to the whole roster
 		$newstudents=array();
 		If ((Input::get('name')!='')&&(Input::get('username')!='')&&(Input::get('email')!=''))
@@ -207,7 +207,7 @@ class CoursesController extends \BaseController {
 					'username'=>Input::get('username'),
 					'email'=>Input::get('email')];
 		};
-		
+
 		// now get the roster
 		if (Input::get('roster')!='')
 		{
@@ -231,16 +231,16 @@ class CoursesController extends \BaseController {
 				$user=User::firstOrNew(['username'=>$newstudent['username']]);
 				// I guess I'll assume that fac and students will
 				// always have different ids. Probably a mistake
-				
+
 				// if the user exists, there must be an existing
 				// student as well. I should grab that one
-				// instead of looking below at whether the 
+				// instead of looking below at whether the
 				// student already exists in the course
-				
+
 				if (!isset($user->password))
 					$user->password=Hash::make($newstudent['username']);
 				$user->userable_type="Student";
-				
+
 				// now see if student exists
 				// this next line doesn't work because firstOrNew
 				// doesn't work on chains like this
@@ -253,7 +253,7 @@ class CoursesController extends \BaseController {
 				{
 					$stu = New Student;
 				}; */
-				
+
 				if (count($user->userable))
 				{
 					//it found the student
@@ -262,7 +262,7 @@ class CoursesController extends \BaseController {
 				{
 					$stu = New student;
 				};
-				
+
 				$stu->name=$newstudent['name'];
 				$stu->hamlineid=$newstudent['username'];
 				$stu->email=$newstudent['email'];
@@ -277,7 +277,7 @@ class CoursesController extends \BaseController {
 		};
 		return Redirect::action("CoursesController@getAddroster", [$course_id]);
 	}
-	
+
 	public function getCalendar($course_id)
 	{
 		$course=Course::findOrFail($course_id);
@@ -299,13 +299,13 @@ class CoursesController extends \BaseController {
 			->header('Content-Type', 'text/calendar')
 			->header('Content-Disposition', 'attachment; filename="test.ics"');
 	}
-	
+
 	public function getAlgorithms($course_id)
 	{
 		$course=Course::with('types', 'types.assignments')->findOrFail($course_id);
 		return View::make('courses.algorithms', compact('course'));
 	}
-	
+
 	public function postAlgorithms($course_id)
 	{
 		$course=Course::with('types')->findOrFail($course_id);
@@ -313,7 +313,7 @@ class CoursesController extends \BaseController {
 		$coursealgo=$course->algorithm;
 		$coursealgo->algorithm = Input::get('coursealgorithm');
 		$coursealgo->save();
-		
+
 		foreach ($types AS $type)
 		{
 			$type->algorithm=Input::get("typealgorithms")[$type->id];
@@ -327,14 +327,14 @@ class CoursesController extends \BaseController {
 		};
 		return Redirect::to(action('CoursesController@getAlgorithms', [$course_id]));
 	}
-	
+
 	public function getGroups($course_id)
 	{
 		$course=Course::findOrFail($course_id);
 		$students=$course->students->lists('name');
 		return View::make('courses.groups', compact('students'));
 	}
-	
+
 	public function postGroups()
 	{
 		$in=Input::get('in');
@@ -358,14 +358,14 @@ class CoursesController extends \BaseController {
 			$role[]="$gnum: $rolelist[$i]";
 			};
 			};
-		
+
 		shuffle($role);
-		return View::make('courses.groups', 
+		return View::make('courses.groups',
 			['in'=>$in,
 			'roles'=>$role]);
-		
+
 	}
-	
+
 	public function getMaketeams($course_id, $assignment_id)
 	{
 		$course=Course::with('teams', 'teams.students', 'students')->findOrFail($course_id);
@@ -386,17 +386,17 @@ class CoursesController extends \BaseController {
 		{
 			$teamarray=array_add($teamarray, $student->id, '');
 		};
-		
-		
+
+
 		// I think I need to return team sets to choose from
 		// do that by grabbing assignments and associated teams
-		
+
 		$assignmentswithteams=$course->assignments()->has('teams')
 			->with('teams')->get();
-			
-		
-		
-		return View::make('courses.maketeams', 
+
+
+
+		return View::make('courses.maketeams',
 			['course'=>$course,
 			'assignment'=>$assignment,
 			'roster'=>$roster,
@@ -404,7 +404,7 @@ class CoursesController extends \BaseController {
 			'assignmentswithteams'=>$assignmentswithteams,
 			'teamarray'=>$teamarray]);
 	}
-	
+
 	public function postMaketeams($course_id, $assignment_id)
 	{
 		$course=Course::with('teams')->findOrFail($course_id);
@@ -479,23 +479,23 @@ class CoursesController extends \BaseController {
 		// in the next iteration
 		// if '', don't do anything
 		// if it's a number, grab that team and add the student
-		// Another thought for the stuff above is once 'A' is made, 
+		// Another thought for the stuff above is once 'A' is made,
 		// replace all 'A's in the array with the new team id.
 		// Then the "if it's a number" approach will just work
-		
+
 		// on the other hand, if other teams are selected
 		// just use those and ignore the teams.
 		// there's still a problem with one student being on
 		// multiple teams for the same assignment, though.
-		
+
 		// I think I should change the form so that you can select
 		// collections of teams (like ones for other assignments)
 	}
-	
+
 	// make a link to reset a student's password that takes their user_id
 	// it should check to make sure the student is in a class taught by the logged
 	// in faculty.  I'll do that be passing the class_id as well
-	
+
 	public function getResetstudentpassword($class_id, $u_id)
 	{
 		$curfac=Faculty::findOrFail(Auth::user()->userable_id);
@@ -512,6 +512,25 @@ class CoursesController extends \BaseController {
 	 	$user->password=Hash::make($user->username);
 	 	$user->save();
 	 	return Redirect::to(action('UsersController@getDashboard'));
+	}
+
+	public function getStandards($class_id)
+	{
+		$course=Course::findOrFail($class_id);
+		echo "<h1>$course->classname</h1>";
+		$types=Type::where('course_id',$class_id)->where('type','standard')->lists('id');
+		if (count($types)>0)
+		{
+			$assignments=Assignment::where('type_id',$types[0])->get();
+			echo "<table border='1'>";
+			echo "<tr><th>Comment</th><th>Details</th></tr>";
+			foreach ($assignments AS $a)
+			{
+				echo "<tr><td>$a->comments</td><td>$a->details</td></tr>";
+			}
+			echo "</table>";
+		};
+		//dd($assignments);
 	}
 
 }
