@@ -4,7 +4,7 @@ class CoursesController extends \BaseController {
 
 	public function __construct()
 	{
-		$this->beforeFilter('authFaculty', ['except'=>'getCalendar']);
+		$this->beforeFilter('authFaculty', ['except'=>['getCalendar','getStandards']]);
 	}
 
 
