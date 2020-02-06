@@ -1,4 +1,4 @@
-@extends('layouts.master') 
+@extends('layouts.master')
 @section('head')
 
 	<style>
@@ -10,7 +10,7 @@
 		    overflow : hidden;
 		    position : relative;
 		}
-		 
+
 		#my-iframe
 		{
 		    position : absolute;
@@ -31,10 +31,10 @@
 	</ul>
 	<hr/>
 	<div id="my-div">
-	<iframe src="http://www.rrrather.com/" id="my-iframe" scrolling="no"></iframe>
-	
+	<iframe src="https://www.rrrather.com/category/random" id="my-iframe" scrolling="no"></iframe>
+
 	</div>
-	From {{HTML::link('http://www.rrrather.com')}}
+	From {{HTML::link('https://www.rrrather.com/category/random')}}
 	<hr/>
 	<ul>
 	<?php asort($roles); ?>
