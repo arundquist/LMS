@@ -31,7 +31,8 @@
 	</ul>
 	<hr/>
 	<div id="my-div">
-	<iframe src="https://www.rrrather.com/category/random" id="my-iframe"></iframe>
+		<?php $rnd=rand(1,27); ?>
+	<iframe src="https://www.rrrather.com/category/random/{{$rnd}}" id="my-iframe"></iframe>
 
 	</div>
 	From {{HTML::link('https://www.rrrather.com/category/random')}}
